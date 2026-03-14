@@ -376,8 +376,12 @@ export function NexusView() {
           <section className={`${styles.panel} ${styles.neuralPanel}`}>
             <div className={styles.panelHeader}>
               <div>
-                <span className={styles.panelEyebrow}>Live Neural Simulation</span>
-                <h2 className={styles.panelTitle}>Neural Simulation</h2>
+                <span className={styles.panelEyebrow}>302-Neuron Atlas</span>
+                <h2 className={styles.panelTitle}>Neural Atlas</h2>
+                <p className={styles.panelDescription}>
+                  Live atlas view of the same run, highlighting the sensory, interneuron, and
+                  motor activity shaping the current behavior.
+                </p>
               </div>
               <span className={styles.panelMeta}>
                 {selectedInfo
@@ -398,8 +402,12 @@ export function NexusView() {
           <section className={`${styles.panel} ${styles.trackingPanel}`}>
             <div className={styles.panelHeader}>
               <div>
-                <span className={styles.panelEyebrow}>Live Tracking Camera</span>
-                <h2 className={styles.panelTitle}>Tracking View</h2>
+                <span className={styles.panelEyebrow}>Head-Centered Camera</span>
+                <h2 className={styles.panelTitle}>Tracking Camera</h2>
+                <p className={styles.panelDescription}>
+                  Focused live camera of the same worm and the same moment, aligned with both the
+                  atlas view and the full arena state.
+                </p>
               </div>
               <span className={styles.statePill}>{currentStateLabel}</span>
             </div>
@@ -413,8 +421,12 @@ export function NexusView() {
         <section className={`${styles.panel} ${styles.environmentPanel}`}>
           <div className={styles.panelHeader}>
             <div>
-              <span className={styles.panelEyebrow}>Live Environment</span>
-              <h2 className={styles.panelTitle}>Environment Simulation</h2>
+              <span className={styles.panelEyebrow}>Shared World State</span>
+              <h2 className={styles.panelTitle}>Environment Arena</h2>
+              <p className={styles.panelDescription}>
+                Full-scene view of the active run, including terrain, fields, obstacles, and the
+                locomotion context shared across Synchrony.
+              </p>
             </div>
             <span className={styles.statePill}>{currentStateLabel}</span>
           </div>

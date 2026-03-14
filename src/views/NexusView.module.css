@@ -233,6 +233,14 @@
   letter-spacing: -0.02em;
 }
 
+.panelDescription {
+  margin-top: var(--space-xs);
+  max-width: 62ch;
+  color: var(--color-text-dim);
+  font-size: var(--font-size-sm);
+  line-height: 1.58;
+}
+
 .panelMeta,
 .statePill {
   display: inline-flex;
