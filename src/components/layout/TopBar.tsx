@@ -11,6 +11,7 @@ import styles from './TopBar.module.css';
 const NAV_ITEMS = [
   { key: 'lab', path: '/' },
   { key: 'compare', path: '/compare' },
+  { key: 'connectome', path: '/connectome', fallbackLabel: 'Connectome' },
   { key: 'library', path: '/library' },
   { key: 'saved', path: '/saved' },
   { key: 'settings', path: '/settings' },
@@ -47,7 +48,9 @@ export function TopBar() {
                 }}
                 aria-current={isActive ? 'page' : undefined}
               >
-                {t(`nav.${item.key}`)}
+                {'fallbackLabel' in item
+                  ? t(`nav.${item.key}`, { defaultValue: item.fallbackLabel })
+                  : t(`nav.${item.key}`)}
               </button>
             );
           })}

@@ -7,6 +7,9 @@ import { parseDeepLink } from './deeplink';
 const CompareView = lazy(() =>
   import('../views/CompareView').then((m) => ({ default: m.CompareView })),
 );
+const ConnectomeView = lazy(() =>
+  import('../views/ConnectomeView').then((m) => ({ default: m.ConnectomeView })),
+);
 const LibraryView = lazy(() =>
   import('../views/LibraryView').then((m) => ({ default: m.LibraryView })),
 );
@@ -113,6 +116,7 @@ export function AppRouter() {
       <Routes>
         <Route path="/" element={<LabViewWithDeepLink />} />
         <Route path="/compare" element={<CompareView />} />
+        <Route path="/connectome" element={<ConnectomeView />} />
         <Route path="/library" element={<LibraryView />} />
         <Route path="/saved" element={<SavedView />} />
         <Route path="/settings" element={<SettingsView />} />
