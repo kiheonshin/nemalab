@@ -59,7 +59,12 @@ function TrackingPreview({
       camera,
     };
 
-    renderSimulation(ctx, canvas, renderState);
+    renderSimulation(ctx, canvas, renderState, {
+      suppressWorldBorder: true,
+      ambientBackdrop: true,
+      wormStyleScale: 1 / camera.zoom,
+      sceneStyleScale: 1 / camera.zoom,
+    });
   }, [simInstance, snapshot]);
 
   return (

@@ -10,8 +10,9 @@ import styles from './TopBar.module.css';
 
 const NAV_ITEMS = [
   { key: 'lab', path: '/' },
-  { key: 'compare', path: '/compare' },
   { key: 'connectome', path: '/connectome', fallbackLabel: 'Connectome' },
+  { key: 'synchrony', path: '/synchrony', fallbackLabel: 'Synchrony' },
+  { key: 'compare', path: '/compare' },
   { key: 'library', path: '/library' },
   { key: 'saved', path: '/saved' },
   { key: 'settings', path: '/settings' },

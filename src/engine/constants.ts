@@ -20,7 +20,7 @@ export const DEFAULT_CONFIG = Object.freeze({
   sensors: {
     touch: true,
     chemo: true,
-    thermo: false,
+    thermo: true,
     sampleDistance: 6,
     memory: 950,
     noise: 0.08,
@@ -41,10 +41,10 @@ export const DEFAULT_CONFIG = Object.freeze({
   visuals: {
     showTrail: true,
     showChemicalOverlay: true,
-    showTemperatureOverlay: false,
-    showSensors: false,
+    showTemperatureOverlay: true,
+    showSensors: true,
     showEventMarkers: true,
-    cleanMode: false,
+    cleanMode: true,
     trailLength: 260,
     overlayOpacity: 0.34,
   },

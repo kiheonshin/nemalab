@@ -25,6 +25,8 @@ export interface Camera {
   y: number;
   zoom: number;
   rotation: number;
+  anchorX?: number;
+  anchorY?: number;
 }
 
 export interface RenderState {
@@ -37,6 +39,13 @@ export interface RenderState {
   highlightCues: Record<string, number>;
   previewCue: { type: string; until: number } | null;
   camera?: Camera;
+}
+
+export interface RenderOptions {
+  suppressWorldBorder?: boolean;
+  ambientBackdrop?: boolean;
+  wormStyleScale?: number;
+  sceneStyleScale?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -78,6 +87,7 @@ export function renderSimulation(
   ctx: CanvasRenderingContext2D,
   canvas: HTMLCanvasElement,
   state: RenderState,
+  options: RenderOptions = {},
 ): void {
   syncCanvasForHiDPI(canvas);
   const rect = canvas.getBoundingClientRect();
@@ -92,6 +102,16 @@ export function renderSimulation(
   const worldTopLeft = { x: pad, y: pad };
   const worldWidth = width - pad * 2;
   const worldHeight = height - pad * 2;
+  const worldBleed = options.ambientBackdrop
+    ? Math.max(worldWidth, worldHeight) *
+      Math.max(2.4, (state.camera?.zoom ?? 1) * 1.45)
+    : 0;
+  const extendedWorldTopLeft = {
+    x: worldTopLeft.x - worldBleed,
+    y: worldTopLeft.y - worldBleed,
+  };
+  const extendedWorldWidth = worldWidth + worldBleed * 2;
+  const extendedWorldHeight = worldHeight + worldBleed * 2;
   const { frontPoint, leftPoint, rightPoint } = state.samplePoints;
   const cueTouch = state.highlightCues.touch || 0;
   const cueChemo = state.highlightCues.chemo || 0;
@@ -103,6 +123,7 @@ export function renderSimulation(
   const pulse = 0.5 + 0.5 * Math.sin(performance.now() * 0.01);
 
   const w2s = (p: { x: number; y: number }) => worldToScreen(p, bounds);
+  const sceneStyleScale = options.sceneStyleScale ?? 1;
 
   // --- Background ---
   const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
@@ -111,19 +132,63 @@ export function renderSimulation(
   ctx.fillStyle = bgGradient;
   ctx.fillRect(0, 0, width, height);
 
+  if (options.ambientBackdrop) {
+    const ambientGlow = ctx.createRadialGradient(
+      width * 0.76,
+      height * 0.24,
+      0,
+      width * 0.76,
+      height * 0.24,
+      Math.max(width, height) * 0.72,
+    );
+    ambientGlow.addColorStop(0, 'rgba(125, 226, 207, 0.14)');
+    ambientGlow.addColorStop(0.34, 'rgba(98, 182, 164, 0.08)');
+    ambientGlow.addColorStop(1, 'rgba(98, 182, 164, 0)');
+    ctx.fillStyle = ambientGlow;
+    ctx.fillRect(0, 0, width, height);
+
+    const softField = ctx.createLinearGradient(0, height, width, 0);
+    softField.addColorStop(0, 'rgba(24, 42, 44, 0.22)');
+    softField.addColorStop(0.45, 'rgba(14, 22, 28, 0.04)');
+    softField.addColorStop(1, 'rgba(18, 32, 38, 0.16)');
+    ctx.fillStyle = softField;
+    ctx.fillRect(0, 0, width, height);
+  }
+
   // --- Camera tracking transform ---
   if (state.camera) {
     const cam = state.camera;
     const centerScreen = w2s({ x: cam.x, y: cam.y });
+    const anchorX = clamp(cam.anchorX ?? 0.5, 0, 1);
+    const anchorY = clamp(cam.anchorY ?? 0.5, 0, 1);
     ctx.save();
-    ctx.translate(width / 2, height / 2);
+    ctx.translate(width * anchorX, height * anchorY);
     ctx.scale(cam.zoom, cam.zoom);
     ctx.rotate(-cam.rotation);
     ctx.translate(-centerScreen.x, -centerScreen.y);
   }
 
+  if (options.ambientBackdrop) {
+    const immersiveField = ctx.createLinearGradient(
+      extendedWorldTopLeft.x,
+      extendedWorldTopLeft.y,
+      extendedWorldTopLeft.x + extendedWorldWidth * 0.7,
+      extendedWorldTopLeft.y + extendedWorldHeight,
+    );
+    immersiveField.addColorStop(0, 'rgba(13, 22, 22, 0.98)');
+    immersiveField.addColorStop(0.42, 'rgba(12, 18, 24, 0.96)');
+    immersiveField.addColorStop(1, 'rgba(10, 14, 20, 0.94)');
+    ctx.fillStyle = immersiveField;
+    ctx.fillRect(
+      extendedWorldTopLeft.x,
+      extendedWorldTopLeft.y,
+      extendedWorldWidth,
+      extendedWorldHeight,
+    );
+  }
+
   // --- World border ---
-  if (!visuals.cleanMode) {
+  if (!visuals.cleanMode && !options.suppressWorldBorder) {
     ctx.strokeStyle = 'rgba(168, 184, 216, 0.08)';
     ctx.lineWidth = 1;
     ctx.strokeRect(worldTopLeft.x, worldTopLeft.y, worldWidth, worldHeight);
@@ -134,10 +199,12 @@ export function renderSimulation(
     ctx.strokeStyle = `rgba(245, 201, 123, ${
       0.16 + cueTouch * 0.42 + (previewType === 'touch' ? 0.18 : 0)
     })`;
-    ctx.lineWidth = 2 + cueTouch * 2.4;
+    ctx.lineWidth = clamp((2 + cueTouch * 2.4) * sceneStyleScale, 0.9, 4.4);
     ctx.shadowColor = 'rgba(245, 201, 123, 0.26)';
     ctx.shadowBlur =
-      16 * Math.max(cueTouch, previewType === 'touch' ? 0.55 : 0);
+      16 *
+      Math.max(cueTouch, previewType === 'touch' ? 0.55 : 0) *
+      Math.max(sceneStyleScale, 0.55);
     ctx.strokeRect(worldTopLeft.x, worldTopLeft.y, worldWidth, worldHeight);
     ctx.shadowBlur = 0;
   }
@@ -177,7 +244,12 @@ export function renderSimulation(
     );
     gradient.addColorStop(1, 'rgba(80, 140, 110, 0)');
     ctx.fillStyle = gradient;
-    ctx.fillRect(worldTopLeft.x, worldTopLeft.y, worldWidth, worldHeight);
+    ctx.fillRect(
+      extendedWorldTopLeft.x,
+      extendedWorldTopLeft.y,
+      extendedWorldWidth,
+      extendedWorldHeight,
+    );
   }
 
   // --- Temperature overlay ---
@@ -204,7 +276,12 @@ export function renderSimulation(
       grad.addColorStop(0.5, 'rgba(124,168,255,0.03)');
       grad.addColorStop(1, 'rgba(255,176,96,0.18)');
       ctx.fillStyle = grad;
-      ctx.fillRect(worldTopLeft.x, worldTopLeft.y, worldWidth, worldHeight);
+      ctx.fillRect(
+        extendedWorldTopLeft.x,
+        extendedWorldTopLeft.y,
+        extendedWorldWidth,
+        extendedWorldHeight,
+      );
       const prefX =
         worldTopLeft.x + worldWidth * cfg.world.preferredTemperature;
       ctx.strokeStyle = `rgba(214, 229, 255, ${
@@ -212,7 +289,7 @@ export function renderSimulation(
         cueThermo * 0.28 +
         (previewType === 'thermo' ? 0.18 : 0)
       })`;
-      ctx.lineWidth = 2;
+      ctx.lineWidth = clamp(2 * sceneStyleScale, 0.9, 2);
       ctx.setLineDash([8, 8]);
       ctx.beginPath();
       ctx.moveTo(prefX, worldTopLeft.y);
@@ -233,7 +310,12 @@ export function renderSimulation(
       radial.addColorStop(0.35, 'rgba(163,186,255,0.08)');
       radial.addColorStop(1, 'rgba(90,118,255,0)');
       ctx.fillStyle = radial;
-      ctx.fillRect(worldTopLeft.x, worldTopLeft.y, worldWidth, worldHeight);
+      ctx.fillRect(
+        extendedWorldTopLeft.x,
+        extendedWorldTopLeft.y,
+        extendedWorldWidth,
+        extendedWorldHeight,
+      );
       if (cueThermo > 0.01 || previewType === 'thermo') {
         ctx.beginPath();
         ctx.arc(hotspot.x, hotspot.y, 42 + pulse * 8, 0, Math.PI * 2);
@@ -242,7 +324,7 @@ export function renderSimulation(
           cueThermo * 0.28 +
           (previewType === 'thermo' ? 0.18 : 0)
         })`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = clamp(2 * sceneStyleScale, 0.9, 2);
         ctx.stroke();
       }
     }
@@ -260,7 +342,7 @@ export function renderSimulation(
   ctx.arc(foodCenter.x, foodCenter.y, foodScreenRadius, 0, Math.PI * 2);
   ctx.fill();
   ctx.strokeStyle = 'rgba(146, 243, 185, 0.36)';
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = clamp(1.5 * sceneStyleScale, 0.85, 1.5);
   ctx.stroke();
 
   if (cueChemo > 0.01 || previewType === 'chemo') {
@@ -279,9 +361,9 @@ export function renderSimulation(
       cueChemo * 0.36 +
       (previewType === 'chemo' ? 0.18 : 0)
     })`;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = clamp(3 * sceneStyleScale, 1.1, 3);
     ctx.shadowColor = 'rgba(122, 242, 176, 0.28)';
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 18 * Math.max(sceneStyleScale, 0.55);
     ctx.stroke();
     ctx.shadowBlur = 0;
   }
@@ -310,7 +392,11 @@ export function renderSimulation(
             (previewType === 'touch' ? 0.12 : 0)
           })`
         : 'rgba(161, 173, 193, 0.18)';
-    ctx.lineWidth = cueTouch > 0.01 || previewType === 'touch' ? 2 : 1;
+    ctx.lineWidth = clamp(
+      (cueTouch > 0.01 || previewType === 'touch' ? 2 : 1) * sceneStyleScale,
+      0.7,
+      2,
+    );
     ctx.stroke();
   });
 
@@ -323,7 +409,7 @@ export function renderSimulation(
       else ctx.lineTo(screen.x, screen.y);
     });
     ctx.strokeStyle = 'rgba(130, 205, 190, 0.24)';
-    ctx.lineWidth = 1.8;
+    ctx.lineWidth = clamp(1.8 * sceneStyleScale, 0.8, 1.8);
     ctx.stroke();
   }
 
@@ -339,7 +425,13 @@ export function renderSimulation(
             ? `rgba(255, 204, 116, ${alpha})`
             : `rgba(125, 226, 207, ${alpha})`;
       ctx.beginPath();
-      ctx.arc(point.x, point.y, 4.4, 0, Math.PI * 2);
+      ctx.arc(
+        point.x,
+        point.y,
+        clamp(4.4 * sceneStyleScale, 1.9, 4.4),
+        0,
+        Math.PI * 2,
+      );
       ctx.fillStyle = color;
       ctx.fill();
     });
@@ -368,6 +460,14 @@ export function renderSimulation(
     };
   });
 
+  const wormStyleScale = options.wormStyleScale ?? 1;
+  const wormLineWidth = clamp(
+    (4.4 + state.config.worm.segmentCount * 0.13) * wormStyleScale,
+    2.2,
+    10.5,
+  );
+  const headRadius = clamp(wormLineWidth * 0.72, 2.4, 6.2);
+
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
   ctx.beginPath();
@@ -381,13 +481,9 @@ export function renderSimulation(
       : state.worm.state === 'turn'
         ? 'rgba(255, 160, 160, 0.96)'
         : 'rgba(126, 226, 207, 0.96)';
-  ctx.lineWidth = clamp(
-    4.4 + state.config.worm.segmentCount * 0.13,
-    6,
-    10.5,
-  );
+  ctx.lineWidth = wormLineWidth;
   ctx.shadowColor = 'rgba(76, 178, 163, 0.22)';
-  ctx.shadowBlur = 14;
+  ctx.shadowBlur = 14 * Math.max(wormStyleScale, 0.6);
   ctx.stroke();
   ctx.shadowBlur = 0;
 
@@ -395,7 +491,7 @@ export function renderSimulation(
   const head = segmentPoints[0];
   if (head) {
     ctx.beginPath();
-    ctx.arc(head.x, head.y, 6.5, 0, Math.PI * 2);
+    ctx.arc(head.x, head.y, headRadius, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(242, 247, 255, 0.9)';
     ctx.fill();
   }
@@ -430,7 +526,7 @@ export function renderSimulation(
               ? `rgba(190, 213, 255, ${0.24 + pulse * 0.18})`
               : `rgba(166, 255, 205, ${0.24 + pulse * 0.18})`;
         ctx.strokeStyle = guideColor;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = clamp(1.5 * sceneStyleScale, 0.7, 1.5);
         ctx.stroke();
       });
     }
@@ -480,13 +576,17 @@ export function renderSimulation(
       ctx.arc(
         screen.x,
         screen.y,
-        hasCue ? 5.2 + pulse * 0.6 : 4.2,
+        clamp(
+          (hasCue ? 5.2 + pulse * 0.6 : 4.2) * sceneStyleScale,
+          2.2,
+          5.8,
+        ),
         0,
         Math.PI * 2,
       );
       ctx.fillStyle = color;
       ctx.shadowColor = color;
-      ctx.shadowBlur = hasCue ? 16 : 0;
+      ctx.shadowBlur = hasCue ? 16 * Math.max(sceneStyleScale, 0.55) : 0;
       ctx.fill();
       ctx.shadowBlur = 0;
     });

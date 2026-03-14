@@ -10,6 +10,9 @@ const CompareView = lazy(() =>
 const ConnectomeView = lazy(() =>
   import('../views/ConnectomeView').then((m) => ({ default: m.ConnectomeView })),
 );
+const NexusView = lazy(() =>
+  import('../views/NexusView').then((m) => ({ default: m.NexusView })),
+);
 const LibraryView = lazy(() =>
   import('../views/LibraryView').then((m) => ({ default: m.LibraryView })),
 );
@@ -117,6 +120,8 @@ export function AppRouter() {
         <Route path="/" element={<LabViewWithDeepLink />} />
         <Route path="/compare" element={<CompareView />} />
         <Route path="/connectome" element={<ConnectomeView />} />
+        <Route path="/synchrony" element={<NexusView />} />
+        <Route path="/nexus" element={<NexusView />} />
         <Route path="/library" element={<LibraryView />} />
         <Route path="/saved" element={<SavedView />} />
         <Route path="/settings" element={<SettingsView />} />

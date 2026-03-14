@@ -3,14 +3,10 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-}
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
+  margin-top: calc(var(--space-sm) * -1);
+  margin-bottom: calc(var(--space-md) * -1);
+  padding-top: 2px;
+  padding-bottom: 4px;
 }
 
 .toolbarButton {
@@ -131,14 +127,15 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.74fr);
+  grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--right-rail-width);
   gap: var(--space-lg);
   flex: 1;
   min-height: 0;
 }
 
-.atlasPanel,
-.infoPanel,
+.leftRail,
+.centerPanel,
+.rightRail,
 .emptyState {
   border: 1px solid var(--color-panel-border);
   border-radius: var(--radius-xl);
@@ -150,44 +147,70 @@
   -webkit-backdrop-filter: blur(26px);
 }
 
-.atlasPanel {
+.leftRail,
+.rightRail {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
+  min-width: 0;
   min-height: 0;
-  padding: var(--space-xl);
+  padding: 22px var(--space-lg);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.leftRail::-webkit-scrollbar,
+.rightRail::-webkit-scrollbar {
+  display: none;
+}
+
+.centerPanel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .panelHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-lg);
+  gap: var(--space-md);
+  padding: 10px 16px 0;
 }
 
-.panelEyebrow,
-.infoEyebrow {
+.panelEyebrow {
   display: inline-flex;
-  margin-bottom: 10px;
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.12em;
+  margin-bottom: 2px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-text-faint);
 }
 
 .panelTitle,
-.infoTitle,
-.selectedName {
-  font-size: clamp(1.08rem, 1rem + 0.32vw, 1.34rem);
+.sectionTitle {
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.selectedName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  letter-spacing: 0;
 }
 
 .panelDescription,
-.selectedSummary {
-  margin-top: var(--space-sm);
+.selectedSummary,
+.sectionDescription {
+  margin-top: var(--space-xs);
   color: var(--color-text-dim);
-  line-height: 1.7;
+  font-size: var(--font-size-sm);
+  line-height: 1.58;
 }
 
 .stateCluster {
@@ -198,14 +221,16 @@
 }
 
 .statePill,
-.stateMeta {
+.stateMeta,
+.previewState {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
   padding: 8px 12px;
 }
 
-.statePill {
+.statePill,
+.previewState {
   background: rgba(125, 226, 207, 0.12);
   color: var(--color-accent);
   font-weight: var(--font-weight-bold);
@@ -217,11 +242,75 @@
   font-size: var(--font-size-sm);
 }
 
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.infoSection + .infoSection {
+  border-top: 1px solid rgba(173, 190, 222, 0.12);
+  padding-top: var(--space-lg);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.sectionMeta {
+  color: var(--color-text-faint);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.metricGrid,
+.selectedMetaGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.metricCard,
+.metaItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  min-width: 0;
+}
+
+.metricCardLabel,
+.metaLabel {
+  color: var(--color-text-dim);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0;
+  text-transform: none;
+  flex-shrink: 0;
+}
+
+.metricCardValue,
+.metaValue {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+  text-align: right;
+}
+
 .routeRow {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-sm);
+  padding: 10px 16px 0;
 }
 
 .routeItem {
@@ -260,18 +349,53 @@
   font-size: 0.92rem;
 }
 
+.atlasStage {
+  flex: 1;
+  min-height: 0;
+  padding: 2px 12px 12px;
+}
+
 .atlasCanvas {
   position: relative;
-  min-height: 0;
-  border-radius: var(--radius-lg);
+  height: 100%;
+  min-height: 500px;
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(10, 14, 20, 0.88);
+  border: none;
+  background: transparent;
+}
+
+.controlOverlay {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 8px;
+  display: flex;
+  justify-content: center;
+  z-index: 12;
+}
+
+.controlToolbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: clamp(var(--space-sm), 1vw, var(--space-md));
+  width: min(100%, max-content);
+  max-width: 100%;
+}
+
+.controlToolGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 0.8vw, var(--space-sm));
+  min-width: 0;
 }
 
 .atlasSvg {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
 }
 
@@ -300,30 +424,29 @@
   font-weight: 700;
 }
 
+.previewFrame {
+  width: 100%;
+  height: 176px;
+  min-height: 176px;
+  overflow: hidden;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 72% 26%, rgba(125, 226, 207, 0.1), transparent 30%),
+    rgba(10, 14, 20, 0.98);
+  border: 1px solid rgba(173, 190, 222, 0.08);
+}
+
+.previewCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .footNote {
+  padding: 0 14px 12px;
   color: var(--color-text-faint);
-  font-size: 0.92rem;
-  line-height: 1.7;
-}
-
-.sideRail {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-
-.sideRail::-webkit-scrollbar {
-  display: none;
-}
-
-.infoPanel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  padding: var(--space-lg);
+  font-size: 0.82rem;
+  line-height: 1.55;
 }
 
 .signalList,
@@ -349,7 +472,7 @@
 
 .signalLabel {
   color: var(--color-text);
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }
 
@@ -374,7 +497,7 @@
 .routeStackItem {
   padding: 11px 14px;
   text-align: left;
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
 }
 
 .routeStackItemActive,
@@ -388,16 +511,26 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: var(--space-md);
   align-items: center;
-  padding: 10px 12px;
-  border: 1px solid rgba(173, 190, 222, 0.1);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.02);
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid rgba(173, 190, 222, 0.08);
+  border-radius: 0;
+  background: transparent;
   color: var(--color-text);
   cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.neuronRow:last-child {
+  border-bottom: none;
 }
 
 .neuronName {
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   color: var(--color-text);
 }
 
@@ -407,9 +540,15 @@
   min-width: 0;
 }
 
+.neuronRow:hover {
+  color: var(--color-accent);
+  border-color: rgba(125, 226, 207, 0.22);
+}
+
 .neuronActivity,
 .selectedActivity {
   color: var(--color-accent);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
 }
@@ -424,33 +563,7 @@
 .selectedLabel {
   margin-top: 6px;
   color: var(--color-text-dim);
-}
-
-.selectedMetaGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-sm);
-}
-
-.metaItem {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.metaLabel {
-  color: var(--color-text-faint);
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.metaValue {
-  color: var(--color-text);
-  font-size: 0.94rem;
+  font-size: var(--font-size-sm);
 }
 
 .emptyState {
@@ -472,25 +585,57 @@
 @media (max-width: 1280px) {
   .pageContent {
     overflow-y: auto;
+    margin: 0;
+    padding: 0;
   }
 
   .layout {
     grid-template-columns: 1fr;
   }
 
-  .sideRail {
+  .centerPanel {
+    order: 1;
+  }
+
+  .leftRail {
+    order: 2;
+  }
+
+  .rightRail {
+    order: 3;
+  }
+
+  .leftRail,
+  .rightRail {
     overflow: visible;
+    padding: var(--space-md);
+  }
+
+  .panelHeader {
+    padding: var(--space-lg) var(--space-lg) 0;
+  }
+
+  .routeRow {
+    padding: 0 var(--space-lg);
+  }
+
+  .atlasStage {
+    padding: var(--space-md);
+  }
+
+  .atlasCanvas {
+    min-height: 460px;
+  }
+
+  .footNote {
+    padding: 0 var(--space-lg) var(--space-lg);
   }
 }
 
 @media (max-width: 768px) {
-  .toolbar {
-    width: 100%;
-  }
-
   .toolbarButton {
     min-width: 0;
-    flex: 1 1 0;
+    flex: 1 1 calc(50% - var(--space-sm));
   }
 
   .speedField {
@@ -503,30 +648,87 @@
     min-width: 0;
   }
 
-  .atlasPanel {
-    padding: var(--space-md);
-    gap: var(--space-md);
-  }
-
   .panelHeader {
     flex-direction: column;
     align-items: stretch;
+    padding: var(--space-md) var(--space-md) 0;
+  }
+
+  .panelDescription {
+    margin-top: 8px;
   }
 
   .stateCluster {
     align-items: flex-start;
   }
 
-  .infoPanel {
-    padding: var(--space-md);
+  .routeRow {
+    padding: 14px var(--space-md) 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .routeRow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .atlasStage {
+    padding: var(--space-sm) var(--space-sm) var(--space-md);
+  }
+
+  .atlasCanvas {
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .controlOverlay {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    padding: 0 var(--space-sm) var(--space-sm);
+  }
+
+  .controlToolbox {
+    width: 100%;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: stretch;
+  }
+
+  .controlToolGroup {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .footNote {
+    padding: 0 var(--space-md) var(--space-md);
   }
 
   .selectedMetaGrid,
+  .metricGrid,
   .neuronRow {
     grid-template-columns: 1fr;
   }
 
   .routeItem {
-    flex-wrap: wrap;
+    flex: 0 0 auto;
+  }
+
+  .atlasSvg {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 98 / 58;
+  }
+
+  .leftRail {
+    order: 3;
+  }
+
+  .rightRail {
+    order: 2;
   }
 }

@@ -38,6 +38,7 @@ export function SimulationCanvas() {
         y: worm.y,
         zoom: 3.1,
         rotation,
+        anchorY: 0.39,
       };
     }
 
@@ -53,7 +54,18 @@ export function SimulationCanvas() {
       camera,
     };
 
-    renderSimulation(ctx, canvas, renderState);
+    renderSimulation(
+      ctx,
+      canvas,
+      renderState,
+      trackingMode
+        ? {
+            suppressWorldBorder: true,
+            ambientBackdrop: true,
+            sceneStyleScale: camera ? 1 / camera.zoom : 1,
+          }
+        : {},
+    );
   }, [simInstance, snapshot, running, trackingMode]);
 
   return (

@@ -16,16 +16,17 @@
 }
 
 .settingLabel {
-  font-size: clamp(1.02rem, 0.98rem + 0.18vw, 1.15rem);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
+  letter-spacing: -0.02em;
 }
 
 .settingHint {
   margin: var(--space-xs) 0 0;
-  font-size: 0.96rem;
+  font-size: var(--font-size-sm);
   color: var(--color-text-dim);
-  line-height: 1.75;
+  line-height: 1.58;
 }
 
 .settingRow {
@@ -42,7 +43,8 @@
   border-radius: var(--radius-sm);
   padding: 0.72rem 0.9rem;
   color: var(--color-text);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   font-family: var(--font-stack);
 }
 

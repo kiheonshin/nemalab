@@ -4,7 +4,7 @@
     "subtitle": "C. elegans Sensorimotor Simulator"
   },
   "nav": {
-    "lab": "Lab",
+    "lab": "Simulator",
     "compare": "Compare",
     "library": "Library",
     "saved": "Saved",
@@ -110,7 +110,7 @@
     "saved": "Config saved locally.",
     "loaded": "Saved experiment loaded.",
     "deleted": "Deleted.",
-    "copiedToCompare": "Lab config copied to Compare baseline."
+    "copiedToCompare": "Simulator config copied to Compare baseline."
   },
   "explanation": {
     "state_cruise": "Cruising — speed {{speed}} u/s",
