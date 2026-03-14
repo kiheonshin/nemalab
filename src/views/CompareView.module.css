@@ -1,0 +1,422 @@
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.controlBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0;
+}
+
+.toolbarButton {
+  min-width: 84px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.015);
+  color: var(--color-text-dim);
+  cursor: pointer;
+  transition: transform var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+}
+
+.toolbarButton:hover {
+  transform: translateY(-1px);
+  color: var(--color-text);
+  background: rgba(125, 226, 207, 0.09);
+}
+
+.toolbarButtonActive {
+  color: var(--color-accent);
+  background: rgba(125, 226, 207, 0.12);
+}
+
+.toolbarButtonIcon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbarButtonIcon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.toolbarButtonLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.speedField {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 212px;
+  padding: 10px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.speedFieldBody {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.speedSliderRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.speedScaleValue {
+  font-size: 10px;
+  color: var(--color-text-faint);
+  letter-spacing: 0.04em;
+}
+
+.speedSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(173, 190, 222, 0.16);
+  outline: none;
+  cursor: pointer;
+}
+
+.speedSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(7, 11, 18, 0.92);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(125, 226, 207, 0.14);
+}
+
+.speedSlider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(7, 11, 18, 0.92);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(125, 226, 207, 0.14);
+}
+
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--space-lg);
+  flex: 1;
+  min-height: 0;
+}
+
+.stagePanel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(18, 23, 34, 0.94), rgba(14, 19, 28, 0.84));
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.stageHeader {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  right: var(--space-md);
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  pointer-events: none;
+}
+
+.stageTitle {
+  font-size: 1.02rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.stageLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0.85;
+}
+
+.canvasWrapper {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at top right, rgba(125, 226, 207, 0.08), transparent 30%),
+    rgba(10, 14, 20, 0.98);
+}
+
+.stageCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.metricsPanel,
+.variantControls {
+  position: absolute;
+  z-index: 3;
+  bottom: var(--space-lg);
+  padding: var(--space-lg);
+  border: 1px solid rgba(173, 190, 222, 0.14);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(12, 17, 25, 0.9), rgba(10, 14, 22, 0.76));
+  box-shadow: 0 18px 36px rgba(4, 8, 16, 0.34);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.leftOverlay {
+  left: var(--space-lg);
+  width: min(360px, calc(100% - (var(--space-lg) * 2)));
+}
+
+.rightOverlay {
+  right: var(--space-lg);
+  width: min(390px, calc(100% - (var(--space-lg) * 2)));
+}
+
+.metricsHeader,
+.variantHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.metricsPanelTitle,
+.variantTitle {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm) var(--space-lg);
+}
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-width: 0;
+  font-size: var(--font-size-sm);
+}
+
+.metricLabel {
+  color: var(--color-text-dim);
+}
+
+.metricValue {
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.variantControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-height: min(360px, calc(100% - 124px));
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.variantControls::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 1280px) {
+  .pageContent {
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .pageContent::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stageGrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: minmax(320px, auto);
+  }
+
+  .controlBar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .canvasWrapper {
+    min-height: 0;
+  }
+
+  .variantControls {
+    max-height: min(300px, calc(100% - 112px));
+  }
+}
+
+@media (max-width: 900px) {
+  .stagePanel {
+    overflow: visible;
+    padding-bottom: var(--space-md);
+  }
+
+  .stageHeader {
+    position: static;
+    padding: var(--space-md) var(--space-md) 0;
+    pointer-events: auto;
+  }
+
+  .canvasWrapper {
+    flex: none;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    min-height: clamp(240px, 78vw, 420px);
+    margin: var(--space-sm) var(--space-md) var(--space-md);
+    border-radius: var(--radius-lg);
+  }
+
+  .metricsPanel,
+  .variantControls {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    margin: 0 var(--space-md);
+    padding: var(--space-md);
+  }
+
+  .leftOverlay,
+  .rightOverlay {
+    width: auto;
+  }
+
+  .variantControls {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    width: 100%;
+  }
+
+  .controlBar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: var(--space-sm);
+  }
+
+  .stageGrid {
+    gap: var(--space-md);
+  }
+
+  .toolbarButton {
+    min-width: 0;
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  .speedField {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .speedFieldBody {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metricRow {
+    gap: var(--space-sm);
+  }
+
+  .metricValue {
+    font-size: 0.92rem;
+  }
+
+  .variantHeader {
+    align-items: flex-start;
+  }
+
+  .variantControls {
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbarButtonLabel {
+    font-size: 0.72rem;
+  }
+
+  .stageTitle {
+    font-size: 0.95rem;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .speedSliderRow {
+    gap: 10px;
+  }
+}

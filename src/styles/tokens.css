@@ -1,0 +1,84 @@
+/* ===== Nema Lab Design Tokens ===== */
+
+:root {
+  /* --- Colors: Dark Theme (default) --- */
+  --color-bg: #0d1118;
+  --color-bg-soft: rgba(15, 19, 28, 0.86);
+  --color-panel: rgba(16, 21, 31, 0.78);
+  --color-panel-strong: rgba(18, 23, 34, 0.94);
+  --color-panel-border: rgba(173, 190, 222, 0.12);
+  --color-panel-border-strong: rgba(173, 190, 222, 0.2);
+  --color-text: #eef3ff;
+  --color-text-dim: rgba(230, 237, 254, 0.72);
+  --color-text-faint: rgba(230, 237, 254, 0.52);
+  --color-accent: #7de2cf;
+  --color-accent-2: #9cb8ff;
+  --color-warning: #f5c97b;
+  --color-danger: #ff8c8c;
+  --color-success: #8be9b4;
+
+  /* --- Typography --- */
+  --font-stack: Inter, "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 28px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* --- Spacing --- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+
+  /* --- Radius --- */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+
+  /* --- Shadows --- */
+  --shadow-panel: 0 30px 60px rgba(0, 0, 0, 0.34);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.18);
+
+  /* --- Layout --- */
+  --topbar-height: 78px;
+  --left-rail-width: 360px;
+  --right-rail-width: 340px;
+  --max-content-width: 1880px;
+
+  /* --- Transitions --- */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+/* Mobile: smaller topbar height */
+@media (max-width: 768px) {
+  :root {
+    --topbar-height: 56px;
+    --left-rail-width: 100%;
+    --right-rail-width: 100%;
+  }
+}
+
+/* Light theme override (F24 — Could) */
+[data-theme="light"] {
+  --color-bg: #f8f9fc;
+  --color-bg-soft: rgba(240, 242, 248, 0.86);
+  --color-panel: rgba(255, 255, 255, 0.82);
+  --color-panel-strong: rgba(255, 255, 255, 0.94);
+  --color-panel-border: rgba(60, 70, 90, 0.12);
+  --color-panel-border-strong: rgba(60, 70, 90, 0.2);
+  --color-text: #1a1e2a;
+  --color-text-dim: rgba(26, 30, 42, 0.72);
+  --color-text-faint: rgba(26, 30, 42, 0.52);
+  --color-accent: #1a9b85;
+}

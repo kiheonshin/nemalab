@@ -1,0 +1,83 @@
+/* ===== Toggle Chip Component ===== */
+
+.chipWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-panel-border);
+  background: transparent;
+  color: var(--color-text-dim);
+  font-family: var(--font-stack);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+  user-select: none;
+}
+
+.chip:hover {
+  background: rgba(125, 226, 207, 0.06);
+  border-color: rgba(125, 226, 207, 0.3);
+}
+
+.on {
+  background: rgba(125, 226, 207, 0.1);
+  border-color: rgba(125, 226, 207, 0.4);
+  color: var(--color-accent);
+}
+
+.previewing {
+  animation: chipPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes chipPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(125, 226, 207, 0);
+  }
+  50% {
+    box-shadow: 0 0 12px 2px rgba(125, 226, 207, 0.25);
+  }
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-faint);
+  transition: background var(--transition-fast);
+}
+
+.on .indicator {
+  background: var(--color-accent);
+}
+
+/* --- Tooltip --- */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(20, 26, 36, 0.95);
+  border: 1px solid var(--color-panel-border);
+  color: var(--color-text-dim);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: 220px;
+  white-space: normal;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}

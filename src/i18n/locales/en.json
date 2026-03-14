@@ -1,0 +1,190 @@
+{
+  "app": {
+    "title": "Nema Lab",
+    "subtitle": "C. elegans Sensorimotor Simulator"
+  },
+  "nav": {
+    "lab": "Lab",
+    "compare": "Compare",
+    "library": "Library",
+    "saved": "Saved",
+    "settings": "Settings"
+  },
+  "lab": {
+    "config": "Experiment Config",
+    "basic": "Basic",
+    "advanced": "Advanced",
+    "sensors": "Sensors",
+    "worm": "Worm",
+    "behavior": "Behavior",
+    "environment": "Environment",
+    "visuals": "Visuals",
+    "apply": "Apply",
+    "applyAll": "Apply All",
+    "resetConfig": "Reset",
+    "resetRun": "Restart",
+    "play": "Play",
+    "pause": "Pause",
+    "step": "Step",
+    "seed": "Seed",
+    "seedLocked": "Lock Seed",
+    "regenerateSeed": "Regenerate",
+    "timeScale": "Speed",
+    "compareThis": "Send to Compare",
+    "save": "Save",
+    "export": "Export JSON",
+    "pendingChanges": "{{count}} pending changes",
+    "noPendingChanges": "No pending changes",
+    "tracking": "Tracking"
+  },
+  "monitor": {
+    "state": "State",
+    "explanation": "Current Explanation",
+    "sensorSummary": "Sensor Summary",
+    "wormState": "Worm State",
+    "recentEvents": "Recent Events",
+    "legend": "Legend",
+    "elapsed": "Elapsed",
+    "distance": "Distance",
+    "collisions": "Collisions",
+    "turns": "Turns",
+    "reversals": "Reversals",
+    "foodTime": "Food Time",
+    "firstFood": "First Food"
+  },
+  "compare": {
+    "title": "A/B Comparison",
+    "baseline": "Baseline (A)",
+    "variant": "Variant (B)",
+    "runBoth": "Run Both",
+    "pauseBoth": "Pause Both",
+    "resetBoth": "Reset Both",
+    "layout2x1": "2x1",
+    "layout2x2": "2x2",
+    "delta": "Delta"
+  },
+  "deeplink": {
+    "error": {
+      "invalidBase64": "Deep link: invalid base64 in config parameter.",
+      "invalidJSON": "Deep link: config parameter is not valid JSON.",
+      "invalidConfigShape": "Deep link: config parameter has unexpected shape.",
+      "unknownPreset": "Deep link: unknown preset ID.",
+      "unknownConfigError": "Deep link: could not parse config parameter."
+    }
+  },
+  "library": {
+    "title": "Preset Library",
+    "start": "Start Now",
+    "difficulty": "Difficulty"
+  },
+  "saved": {
+    "title": "Saved Experiments",
+    "empty": "No saved experiments.",
+    "load": "Load",
+    "delete": "Delete",
+    "clearAll": "Clear All"
+  },
+  "settings": {
+    "title": "Settings",
+    "highContrast": "High Contrast",
+    "reducedMotion": "Reduced Motion",
+    "showOnboarding": "Show Onboarding on Start",
+    "compareDefaultLayout": "Compare Default Layout",
+    "language": "Language"
+  },
+  "landing": {
+    "title": "Nema Lab",
+    "subtitle": "C. elegans Sensorimotor Simulator",
+    "description": "See how three simple sensory rules produce purposeful behavior — hands on.",
+    "startNow": "Start Experiment",
+    "browsePresets": "Browse Presets",
+    "quickStart": "Quick Start",
+    "openLibrary": "Browse Presets",
+    "concept": "View Concept",
+    "continueLast": "Continue Last Experiment"
+  },
+  "toast": {
+    "configApplied": "Changes applied.",
+    "configReset": "Config reset to defaults.",
+    "runReset": "Run restarted with current config.",
+    "saved": "Config saved locally.",
+    "loaded": "Saved experiment loaded.",
+    "deleted": "Deleted.",
+    "copiedToCompare": "Lab config copied to Compare baseline."
+  },
+  "explanation": {
+    "state_cruise": "Cruising — speed {{speed}} u/s",
+    "state_reverse": "Reversing — {{timer}}ms remaining, speed {{speed}} u/s",
+    "state_turn": "Turning {{direction}} — {{timer}}ms remaining",
+    "inside_food": "Inside food patch — {{foodTime}}s in zone",
+    "near_food": "Approaching food — distance {{distance}}",
+    "chemo_gradient_right": "Chemical gradient: stronger right (diff {{strength}}, center {{center}})",
+    "chemo_gradient_left": "Chemical gradient: stronger left (diff {{strength}}, center {{center}})",
+    "chemo_no_gradient": "No chemical gradient (center conc. {{center}})",
+    "thermo_current": "Temperature {{current}} (preferred {{preferred}}, error {{error}})",
+    "thermo_discomfort": "Thermal discomfort: error {{error}} > threshold {{threshold}}",
+    "touch_front": "Front contact detected",
+    "touch_left": "Left contact detected",
+    "touch_right": "Right contact detected",
+    "touch_both": "Both sides contact detected",
+    "bias_right": "Right bias (magnitude {{bias}})",
+    "bias_left": "Left bias (magnitude {{bias}})",
+    "sensors_disabled": "Disabled sensors: {{sensors}}",
+    "event_start": "[{{time}}s] {{title}}",
+    "event_collision": "[{{time}}s] {{title}}",
+    "event_reverse": "[{{time}}s] {{title}}",
+    "event_turn": "[{{time}}s] {{title}}",
+    "event_resume": "[{{time}}s] {{title}}",
+    "event_food": "[{{time}}s] {{title}}",
+    "event_food-exit": "[{{time}}s] {{title}}",
+    "idle": "Idle"
+  },
+  "state": {
+    "cruise": "Cruise",
+    "reverse": "Reverse",
+    "turn": "Turn"
+  },
+  "sensors": {
+    "title": "Sensors",
+    "touch": "Touch",
+    "chemo": "Chemosensory",
+    "thermo": "Thermosensory"
+  },
+  "tooltip": {
+    "touch": "Detects physical contact with obstacles/walls to trigger avoidance behavior",
+    "chemo": "Senses chemical concentration gradient from food to bias movement toward it",
+    "thermo": "Senses temperature gradient to navigate toward preferred temperature band",
+    "showTrail": "Displays the worm's movement path as a trail",
+    "showChemicalOverlay": "Visualizes the food chemical concentration field",
+    "showTemperatureOverlay": "Visualizes the temperature gradient as color",
+    "showSensors": "Shows left/right sensor sample point positions",
+    "showEventMarkers": "Marks collision, turn, and other event locations",
+    "cleanMode": "Hides grid, borders, and other auxiliary elements for a clean view"
+  },
+  "params": {
+    "baseSpeed": "Base Speed",
+    "turnSharpness": "Turn Sharpness",
+    "reversalDuration": "Reversal Duration",
+    "segmentCount": "Segment Count",
+    "sampleDistance": "Sample Distance",
+    "memory": "Memory Window",
+    "noise": "Sensor Noise",
+    "turnProbability": "Base Turn Probability",
+    "gradientGain": "Gradient Follow Gain",
+    "exploration": "Exploration",
+    "discomfort": "Discomfort Threshold",
+    "obstacleDensity": "Obstacle Density",
+    "foodStrength": "Food Strength",
+    "foodRadius": "Food Radius",
+    "temperatureMode": "Temperature Mode",
+    "preferredTemperature": "Preferred Temperature",
+    "showTrail": "Trail",
+    "showChemicalOverlay": "Chemical Overlay",
+    "showTemperatureOverlay": "Temperature Overlay",
+    "showSensors": "Sensor Points",
+    "showEventMarkers": "Event Markers",
+    "cleanMode": "Clean Mode",
+    "trailLength": "Trail Length",
+    "overlayOpacity": "Overlay Opacity"
+  }
+}

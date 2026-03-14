@@ -1,0 +1,90 @@
+/* ===== Button Component ===== */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-stack);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    opacity var(--transition-fast),
+    box-shadow var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1;
+}
+
+/* --- Sizes --- */
+.sizeDefault {
+  padding: var(--space-sm) var(--space-lg);
+  min-height: 36px;
+}
+
+.sizeSmall {
+  padding: var(--space-xs) var(--space-md);
+  min-height: 28px;
+  font-size: var(--font-size-sm);
+}
+
+/* --- Variants --- */
+.primary {
+  background: linear-gradient(135deg, var(--color-accent), #5dd4be);
+  color: #0d1118;
+  border-color: transparent;
+}
+.primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 16px rgba(125, 226, 207, 0.3);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-panel-border-strong);
+}
+.secondary:hover {
+  background: rgba(173, 190, 222, 0.08);
+  border-color: var(--color-accent);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text-dim);
+  border-color: transparent;
+}
+.ghost:hover {
+  color: var(--color-text);
+  background: rgba(173, 190, 222, 0.06);
+}
+
+.accent {
+  background: var(--color-accent-2);
+  color: #0d1118;
+  border-color: transparent;
+}
+.accent:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 12px rgba(156, 184, 255, 0.25);
+}
+
+/* --- States --- */
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ready {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(125, 226, 207, 0.2);
+}
+
+.applied {
+  border-color: var(--color-success);
+}

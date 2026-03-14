@@ -1,0 +1,40 @@
+/* ===== Toast Component ===== */
+
+.container {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--color-panel-strong);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-lg);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: toastIn 250ms ease forwards;
+  pointer-events: auto;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

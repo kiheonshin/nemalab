@@ -1,0 +1,112 @@
+/* ===== LandingOverlay — Full-screen glassmorphism onboarding ===== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 17, 24, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  animation: overlayIn var(--transition-slow) ease forwards;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-3xl) var(--space-3xl);
+  max-width: 480px;
+  width: 90%;
+  background: var(--color-panel-strong);
+  border: 1px solid var(--color-panel-border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-panel);
+  text-align: center;
+  animation: cardIn var(--transition-slow) ease 100ms both;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+}
+
+.description {
+  font-size: var(--font-size-md);
+  color: var(--color-text-dim);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+.primaryBtn {
+  width: 100%;
+  padding: var(--space-md) var(--space-xl);
+  font-family: var(--font-stack);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.primaryBtn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.secondaryBtn {
+  width: 100%;
+  padding: var(--space-md) var(--space-xl);
+  font-family: var(--font-stack);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-panel-border-strong);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.secondaryBtn:hover {
+  background: rgba(125, 226, 207, 0.06);
+  border-color: var(--color-accent);
+}
+
+/* --- Animations --- */
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

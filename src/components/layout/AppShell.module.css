@@ -1,0 +1,26 @@
+/* ===== AppShell Layout ===== */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  max-width: var(--max-content-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-xl) var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: var(--space-sm) var(--space-sm) var(--space-lg);
+  }
+}

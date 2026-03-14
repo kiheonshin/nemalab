@@ -1,0 +1,35 @@
+{
+  "name": "nema-lab",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "atlas:celegans": "python scripts/generate_celegans_atlas.py",
+    "serve:dist": "node scripts/serve-dist.cjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "i18next": "^23.16.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^15.1.0",
+    "react-router-dom": "^6.28.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0",
+    "vitest": "^2.1.0",
+    "jsdom": "^25.0.0"
+  }
+}

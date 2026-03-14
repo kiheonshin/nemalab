@@ -1,0 +1,123 @@
+.pageContent {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  height: 100%;
+}
+
+.previewFrame {
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  height: 160px;
+  background:
+    radial-gradient(circle at top right, rgba(125, 226, 207, 0.08), transparent 28%),
+    rgba(10, 14, 20, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+
+.previewCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform: scale(2.8);
+  will-change: transform-origin;
+}
+
+.cardTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.cardDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  line-height: 1.6;
+}
+
+.sensorRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.sensorLabel {
+  margin-right: 2px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+}
+
+.sensorPill {
+  font-size: var(--font-size-xs);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text-faint);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-weight: var(--font-weight-normal);
+}
+
+.sensorPillActive {
+  background: rgba(125, 226, 207, 0.15);
+  color: var(--color-accent);
+  border-color: rgba(125, 226, 207, 0.3);
+  font-weight: var(--font-weight-medium);
+}
+
+.diffList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.diffChip {
+  display: inline-flex;
+  gap: 3px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+}
+
+.diffKey {
+  color: var(--color-text-faint);
+}
+
+.diffValue {
+  color: var(--color-warning);
+  font-variant-numeric: tabular-nums;
+}
+
+.cardFooter {
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    gap: var(--space-md);
+  }
+
+  .previewFrame {
+    height: 148px;
+  }
+}

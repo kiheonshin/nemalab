@@ -1,0 +1,190 @@
+{
+  "app": {
+    "title": "Nema Lab",
+    "subtitle": "C. elegans 감각-운동 시뮬레이터"
+  },
+  "nav": {
+    "lab": "Lab",
+    "compare": "Compare",
+    "library": "Library",
+    "saved": "Saved",
+    "settings": "Settings"
+  },
+  "lab": {
+    "config": "실험 설정",
+    "basic": "기본",
+    "advanced": "고급",
+    "sensors": "센서",
+    "worm": "선충",
+    "behavior": "행동",
+    "environment": "환경",
+    "visuals": "시각",
+    "apply": "적용",
+    "applyAll": "모두 적용",
+    "resetConfig": "초기화",
+    "resetRun": "재시작",
+    "play": "재생",
+    "pause": "일시정지",
+    "step": "한 프레임",
+    "seed": "시드",
+    "seedLocked": "시드 잠금",
+    "regenerateSeed": "재생성",
+    "timeScale": "속도",
+    "compareThis": "Compare로 보내기",
+    "save": "저장",
+    "export": "JSON 내보내기",
+    "pendingChanges": "{{count}}개 변경사항 대기 중",
+    "noPendingChanges": "변경사항 없음",
+    "tracking": "트래킹"
+  },
+  "monitor": {
+    "state": "상태",
+    "explanation": "현재 설명",
+    "sensorSummary": "센서 요약",
+    "wormState": "선충 상태",
+    "recentEvents": "최근 이벤트",
+    "legend": "범례",
+    "elapsed": "경과",
+    "distance": "이동 거리",
+    "collisions": "충돌",
+    "turns": "회전",
+    "reversals": "반전",
+    "foodTime": "먹이 체류",
+    "firstFood": "첫 먹이 도달"
+  },
+  "compare": {
+    "title": "A/B 비교",
+    "baseline": "기준 (A)",
+    "variant": "변형 (B)",
+    "runBoth": "동시 실행",
+    "pauseBoth": "일시정지",
+    "resetBoth": "초기화",
+    "layout2x1": "2x1",
+    "layout2x2": "2x2",
+    "delta": "차이"
+  },
+  "deeplink": {
+    "error": {
+      "invalidBase64": "딥링크: config 파라미터의 base64가 올바르지 않습니다.",
+      "invalidJSON": "딥링크: config 파라미터가 유효한 JSON이 아닙니다.",
+      "invalidConfigShape": "딥링크: config 파라미터의 구조가 올바르지 않습니다.",
+      "unknownPreset": "딥링크: 알 수 없는 프리셋 ID입니다.",
+      "unknownConfigError": "딥링크: config 파라미터를 파싱할 수 없습니다."
+    }
+  },
+  "library": {
+    "title": "프리셋 라이브러리",
+    "start": "바로 시작",
+    "difficulty": "난이도"
+  },
+  "saved": {
+    "title": "저장된 실험",
+    "empty": "저장된 실험이 없습니다.",
+    "load": "불러오기",
+    "delete": "삭제",
+    "clearAll": "모두 삭제"
+  },
+  "settings": {
+    "title": "설정",
+    "highContrast": "고대비 모드",
+    "reducedMotion": "모션 감소",
+    "showOnboarding": "시작 시 온보딩 표시",
+    "compareDefaultLayout": "Compare 기본 레이아웃",
+    "language": "언어"
+  },
+  "landing": {
+    "title": "Nema Lab",
+    "subtitle": "선충 감각-운동 시뮬레이터",
+    "description": "3개의 단순한 감각 규칙이 어떻게 목적적 행동을 만들어내는지 직접 확인하세요.",
+    "startNow": "바로 실험 시작",
+    "browsePresets": "프리셋 둘러보기",
+    "quickStart": "바로 시작",
+    "openLibrary": "프리셋 살펴보기",
+    "concept": "개념 설명 보기",
+    "continueLast": "최근 실험 이어하기"
+  },
+  "toast": {
+    "configApplied": "변경사항이 적용되었습니다.",
+    "configReset": "Config를 기본값으로 초기화했습니다.",
+    "runReset": "현재 적용된 조건으로 run을 재시작했습니다.",
+    "saved": "현재 config를 로컬에 저장했습니다.",
+    "loaded": "저장된 실험을 불러왔습니다.",
+    "deleted": "삭제되었습니다.",
+    "copiedToCompare": "Lab의 현재 적용 config를 Compare 기준으로 복사했습니다."
+  },
+  "explanation": {
+    "state_cruise": "전진(cruise) 중 — 속도 {{speed}} u/s",
+    "state_reverse": "후진(reverse) 중 — 남은 {{timer}}ms, 속도 {{speed}} u/s",
+    "state_turn": "{{direction}} 방향 회전 중 — 남은 {{timer}}ms",
+    "inside_food": "먹이 패치 안에 있음 — 체류 {{foodTime}}s",
+    "near_food": "먹이 근처 접근 — 거리 {{distance}}",
+    "chemo_gradient_right": "화학 기울기: 오른쪽이 더 강함 (차이 {{strength}}, 중심 {{center}})",
+    "chemo_gradient_left": "화학 기울기: 왼쪽이 더 강함 (차이 {{strength}}, 중심 {{center}})",
+    "chemo_no_gradient": "화학 기울기 없음 (중심 농도 {{center}})",
+    "thermo_current": "현재 온도 {{current}} (선호 {{preferred}}, 오차 {{error}})",
+    "thermo_discomfort": "온도 불편감: 오차 {{error}} > 임계값 {{threshold}}",
+    "touch_front": "전방 접촉 감지",
+    "touch_left": "좌측 접촉 감지",
+    "touch_right": "우측 접촉 감지",
+    "touch_both": "양측 접촉 감지",
+    "bias_right": "우측 편향 (크기 {{bias}})",
+    "bias_left": "좌측 편향 (크기 {{bias}})",
+    "sensors_disabled": "비활성 센서: {{sensors}}",
+    "event_start": "[{{time}}s] {{title}}",
+    "event_collision": "[{{time}}s] {{title}}",
+    "event_reverse": "[{{time}}s] {{title}}",
+    "event_turn": "[{{time}}s] {{title}}",
+    "event_resume": "[{{time}}s] {{title}}",
+    "event_food": "[{{time}}s] {{title}}",
+    "event_food-exit": "[{{time}}s] {{title}}",
+    "idle": "대기 중"
+  },
+  "state": {
+    "cruise": "전진",
+    "reverse": "후진",
+    "turn": "회전"
+  },
+  "sensors": {
+    "title": "센서",
+    "touch": "촉각",
+    "chemo": "화학 감각",
+    "thermo": "온도 감각"
+  },
+  "tooltip": {
+    "touch": "장애물/벽과의 물리적 접촉을 감지하여 회피 행동을 유발합니다",
+    "chemo": "먹이에서 나오는 화학 물질의 농도 기울기를 감지하여 먹이 방향으로 편향합니다",
+    "thermo": "온도 기울기를 감지하여 선호 온도 대역으로 이동합니다",
+    "showTrail": "선충의 이동 경로를 궤적으로 표시합니다",
+    "showChemicalOverlay": "먹이 주변의 화학 물질 농도 분포를 시각화합니다",
+    "showTemperatureOverlay": "온도장의 기울기를 색상으로 시각화합니다",
+    "showSensors": "좌/우 센서 샘플 포인트의 위치를 표시합니다",
+    "showEventMarkers": "충돌, 회전 등 이벤트 발생 지점에 마커를 표시합니다",
+    "cleanMode": "격자, 테두리 등 보조 요소를 숨겨 깔끔한 화면을 제공합니다"
+  },
+  "params": {
+    "baseSpeed": "기본 속도",
+    "turnSharpness": "회전 예리도",
+    "reversalDuration": "반전 지속시간",
+    "segmentCount": "체절 수",
+    "sampleDistance": "샘플 거리",
+    "memory": "메모리 윈도우",
+    "noise": "센서 노이즈",
+    "turnProbability": "기본 회전 확률",
+    "gradientGain": "기울기 추종 이득",
+    "exploration": "탐색",
+    "discomfort": "불편 임계값",
+    "obstacleDensity": "장애물 밀도",
+    "foodStrength": "먹이 강도",
+    "foodRadius": "먹이 반경",
+    "temperatureMode": "온도 모드",
+    "preferredTemperature": "선호 온도",
+    "showTrail": "궤적",
+    "showChemicalOverlay": "화학 오버레이",
+    "showTemperatureOverlay": "온도 오버레이",
+    "showSensors": "센서 포인트",
+    "showEventMarkers": "이벤트 마커",
+    "cleanMode": "클린 모드",
+    "trailLength": "궤적 길이",
+    "overlayOpacity": "오버레이 불투명도"
+  }
+}

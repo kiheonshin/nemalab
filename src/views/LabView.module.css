@@ -1,0 +1,609 @@
+/* ===== LabView — 3-column layout ===== */
+
+/* App-wide viewport frame: all pages share this height constraint */
+.labLayout {
+  display: grid;
+  grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--right-rail-width);
+  gap: var(--space-lg);
+  height: 100%;
+  min-height: 0;
+  align-items: stretch;
+}
+
+/* --- Left Rail (Config Panel) --- */
+.leftRail {
+  min-width: 0;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(18, 23, 34, 0.94), rgba(14, 19, 28, 0.86));
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* --- Center (Canvas with embedded RunBar) --- */
+.center {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top right, rgba(125, 226, 207, 0.1), transparent 38%),
+    linear-gradient(180deg, rgba(18, 23, 34, 0.96), rgba(12, 16, 24, 0.92));
+  border: 1px solid var(--color-panel-border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-panel);
+}
+
+.canvasWrapper {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  background:
+    radial-gradient(circle at 75% 30%, rgba(125, 226, 207, 0.08), transparent 28%),
+    rgba(10, 14, 20, 0.98);
+  border-radius: inherit;
+  aspect-ratio: auto;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- RunBar overlay inside canvas --- */
+.runBarOverlay {
+  position: absolute;
+  left: var(--space-lg);
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.runToolbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: clamp(var(--space-sm), 1vw, var(--space-md));
+  width: min(100%, max-content);
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  overflow: visible;
+}
+
+.runToolbox::-webkit-scrollbar {
+  display: none;
+}
+
+.runToolGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: clamp(8px, 0.8vw, var(--space-sm));
+  min-width: 0;
+}
+
+.runToolDivider {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(180deg, rgba(173, 190, 222, 0), rgba(173, 190, 222, 0.18), rgba(173, 190, 222, 0));
+}
+
+.toolButton {
+  min-width: clamp(68px, 5vw, 74px);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px clamp(10px, 0.8vw, 12px);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.015);
+  color: var(--color-text-dim);
+  cursor: pointer;
+  transition: transform var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.toolButton:hover {
+  transform: translateY(-1px);
+  color: var(--color-text);
+  border-color: transparent;
+  background: rgba(125, 226, 207, 0.09);
+}
+
+.toolButtonActive {
+  color: var(--color-accent);
+  background: rgba(125, 226, 207, 0.12);
+  border-color: transparent;
+}
+
+.toolButtonIcon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolButtonIcon svg,
+.toolFieldIcon svg,
+.inlineToolButton svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.toolButtonLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.toolField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(173, 190, 222, 0.08);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  min-height: 64px;
+}
+
+.toolFieldIcon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(125, 226, 207, 0.08);
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.toolFieldBody {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.toolFieldLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.speedField {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(188px, 22vw, 228px);
+  padding: 11px 14px 10px;
+  border: 1px solid rgba(173, 190, 222, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 1;
+}
+
+.speedFieldBody {
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolboxSpeedSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(173, 190, 222, 0.16);
+  outline: none;
+  cursor: pointer;
+}
+
+.toolboxSpeedSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(7, 11, 18, 0.92);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(125, 226, 207, 0.14);
+}
+
+.toolboxSpeedSlider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(7, 11, 18, 0.92);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(125, 226, 207, 0.14);
+}
+
+.speedSliderRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--space-sm);
+}
+
+.speedScaleValue {
+  font-size: 10px;
+  color: var(--color-text-faint);
+  letter-spacing: 0.04em;
+}
+
+.seedControls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.seedLock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-dim);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.seedInput,
+.speedSelect {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--color-panel-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+  font-family: var(--font-stack);
+  font-size: var(--font-size-sm);
+}
+
+.seedInput {
+  width: 86px;
+}
+
+.seedInputDirty {
+  border-color: rgba(125, 226, 207, 0.6);
+  box-shadow: 0 0 0 1px rgba(125, 226, 207, 0.14);
+}
+
+.inlineToolButton,
+.inlineActionButton {
+  height: 34px;
+  border: 1px solid rgba(173, 190, 222, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-dim);
+  cursor: pointer;
+}
+
+.inlineToolButton {
+  width: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inlineActionButton {
+  padding: 0 10px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+}
+
+/* --- Legend overlay inside canvas --- */
+.legendOverlay {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(7, 11, 18, 0.42);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  z-index: 10;
+  opacity: 0.92;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* --- Right Rail (Monitor Panel) --- */
+.rightRail {
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  background: linear-gradient(180deg, rgba(18, 23, 34, 0.94), rgba(14, 19, 28, 0.86));
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  scrollbar-width: none;
+}
+
+.rightRail::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Monitor section --- */
+.monitorSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.monitorSection + .monitorSection {
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(173, 190, 222, 0.12);
+}
+
+.trackingSection {
+  gap: var(--space-sm);
+}
+
+.monitorTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  width: fit-content;
+  flex-shrink: 0;
+}
+
+.trackingCanvasFrame {
+  position: relative;
+  overflow: hidden;
+  min-height: 176px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(173, 190, 222, 0.08);
+  background:
+    radial-gradient(circle at 72% 24%, rgba(125, 226, 207, 0.12), transparent 30%),
+    rgba(10, 14, 20, 0.98);
+}
+
+.trackingCanvas {
+  width: 100%;
+  height: 100%;
+  min-height: 176px;
+  display: block;
+}
+
+.statePill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.stateCruise {
+  background: rgba(125, 226, 207, 0.15);
+  color: var(--color-accent);
+}
+
+.stateReverse {
+  background: rgba(245, 201, 123, 0.15);
+  color: var(--color-warning);
+}
+
+.stateTurn {
+  background: rgba(255, 140, 140, 0.15);
+  color: var(--color-danger);
+}
+
+.explanationText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  line-height: 1.58;
+  height: calc(1.58em * 6);
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  min-width: 0;
+}
+
+.metricLabel {
+  color: var(--color-text-dim);
+  flex-shrink: 0;
+}
+
+.metricValue {
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.eventItem {
+  font-size: 0.84rem;
+  color: var(--color-text-dim);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  min-width: 0;
+  line-height: 1.48;
+}
+
+.eventItem > span:last-child {
+  line-height: 1.48;
+  min-width: 0;
+}
+
+.eventDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.34em;
+}
+
+.eventSection {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* --- Responsive: tablet / narrow desktop --- */
+@media (max-width: 1280px) {
+  .labLayout {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  /* Renderer first, config second, monitor third */
+  .center { order: 1; }
+  .leftRail { order: 2; }
+  .rightRail { order: 3; }
+
+  .leftRail,
+  .rightRail {
+    min-width: 0;
+    overflow-y: visible;
+    overflow-x: hidden;
+    padding: var(--space-md);
+  }
+
+  .center {
+    min-height: 320px;
+  }
+
+  .canvasWrapper {
+    aspect-ratio: 16 / 10;
+    min-height: 260px;
+  }
+
+  .runBarOverlay {
+    bottom: var(--space-md);
+  }
+
+  .runToolbox {
+    gap: var(--space-sm);
+  }
+}
+
+/* --- Responsive: mobile portrait --- */
+@media (max-width: 768px) {
+  .leftRail,
+  .rightRail {
+    padding: var(--space-md);
+  }
+
+  .canvasWrapper {
+    aspect-ratio: 5 / 4;
+    min-height: 220px;
+  }
+
+  .runToolbox {
+    width: min(94vw, 560px);
+    border-radius: 18px;
+    flex-wrap: wrap;
+  }
+
+  .runToolDivider {
+    display: none;
+  }
+
+  .runToolGroup {
+    width: auto;
+    flex-wrap: wrap;
+  }
+
+  .speedField {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .legendOverlay {
+    top: var(--space-md);
+    right: var(--space-md);
+    left: var(--space-md);
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 7px 10px;
+  }
+
+  .legendItem {
+    font-size: 10px;
+  }
+
+  .monitorTitle {
+    font-size: var(--font-size-md);
+  }
+
+  .trackingCanvasFrame,
+  .trackingCanvas {
+    min-height: 148px;
+  }
+}
