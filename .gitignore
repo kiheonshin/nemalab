@@ -1,12 +1,17 @@
 node_modules/
 dist/
+release/
 .vercel/
 .claude/
+.codex/
 .chrome-*/
 
 *.log
 *.pid
 *.tsbuildinfo
+.deploy-*
+tmp-*.png
+%TEMP%/
 
 /compare-*.png
 /dist-shot.png
