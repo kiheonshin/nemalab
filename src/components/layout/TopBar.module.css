@@ -1,7 +1,8 @@
 /* ===== TopBar Layout ===== */
 
 .topbar {
-  height: var(--topbar-height);
+  height: calc(var(--topbar-height) + var(--safe-area-top));
+  padding-top: var(--safe-area-top);
   background: var(--color-panel);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);

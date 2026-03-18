@@ -10,10 +10,16 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
+    "cap:copy": "npm run build && cap copy",
+    "cap:sync": "npm run build && cap sync",
+    "ios:add": "cap add ios",
+    "ios:sync": "npm run build && cap sync ios",
+    "ios:open": "cap open ios",
     "electron:dev": "node scripts/electron-dev.mjs",
     "electron:start": "npm run build && electron .",
     "electron:pack": "npm run build && electron-builder --dir",
     "electron:dist": "npm run build && electron-builder",
+    "electron:mac:dist": "npm run build && electron-builder --mac dmg zip mas",
     "brand:assets": "python scripts/generate_brand_assets.py",
     "atlas:celegans": "python scripts/generate_celegans_atlas.py",
     "atlas:connectome-b": "node scripts/generate_connectome_b_data.mjs",
@@ -23,6 +29,10 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.1",
     "i18next": "^23.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -32,6 +42,8 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/ios": "^8.2.0",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.1.0",
     "@types/react": "^18.3.12",
@@ -55,8 +67,27 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
+      "build/**/*",
       "package.json"
     ],
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        "dmg",
+        "zip",
+        "mas"
+      ],
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+      "gatekeeperAssess": false,
+      "hardenedRuntime": true
+    },
+    "mas": {
+      "category": "public.app-category.education",
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist"
+    },
     "win": {
       "icon": "public/android-chrome-512x512.png",
       "signAndEditExecutable": false,

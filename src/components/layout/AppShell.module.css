@@ -16,11 +16,19 @@
   max-width: var(--max-content-width);
   width: 100%;
   margin: 0 auto;
-  padding: var(--space-lg) var(--space-xl) var(--space-xl);
+  padding:
+    var(--space-lg)
+    calc(var(--space-xl) + var(--safe-area-right))
+    calc(var(--space-xl) + var(--safe-area-bottom))
+    calc(var(--space-xl) + var(--safe-area-left));
 }
 
 @media (max-width: 768px) {
   .main {
-    padding: var(--space-sm) var(--space-sm) var(--space-lg);
+    padding:
+      var(--space-sm)
+      calc(var(--space-sm) + var(--safe-area-right))
+      calc(var(--space-lg) + var(--safe-area-bottom))
+      calc(var(--space-sm) + var(--safe-area-left));
   }
 }
