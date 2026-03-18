@@ -19,5 +19,10 @@ export function trackEvent(
 }
 
 export function trackPageView(path: string): void {
-  trackEvent('page_view', { page_path: path });
+  trackEvent('page_view', {
+    page_path: path,
+    page_location:
+      typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}#${path}` : path,
+    page_title: typeof document !== 'undefined' ? document.title : 'Nema Lab',
+  });
 }

@@ -9,6 +9,8 @@ interface PageLayoutProps {
   children: ReactNode;
   className?: string;
   contentClassName?: string;
+  headerClassName?: string;
+  actionsClassName?: string;
   headerVariant?: 'default' | 'minimal';
   hideHeader?: boolean;
 }
@@ -21,6 +23,8 @@ export function PageLayout({
   children,
   className,
   contentClassName,
+  headerClassName,
+  actionsClassName,
   headerVariant = 'default',
   hideHeader = false,
 }: PageLayoutProps) {
@@ -29,9 +33,11 @@ export function PageLayout({
   const headerClassNames = [
     styles.header,
     headerVariant === 'minimal' ? styles.headerMinimal : '',
+    headerClassName ?? '',
   ]
     .filter(Boolean)
     .join(' ');
+  const actionsClassNames = [styles.actions, actionsClassName ?? ''].filter(Boolean).join(' ');
 
   return (
     <section className={pageClassName}>
@@ -42,7 +48,7 @@ export function PageLayout({
             <h1 className={styles.title}>{title}</h1>
             {description && <p className={styles.description}>{description}</p>}
           </div>
-          {actions ? <div className={styles.actions}>{actions}</div> : null}
+          {actions ? <div className={actionsClassNames}>{actions}</div> : null}
         </header>
       ) : null}
 

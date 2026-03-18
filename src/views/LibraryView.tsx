@@ -138,8 +138,8 @@ export function LibraryView() {
       running: true,
     });
     createSimulation(config, appliedSeed);
-    showToast(`${preset.name} preset으로 시작합니다.`);
-    navigate('/');
+    showToast(t('library.startPresetToast', { preset: preset.name }));
+    navigate('/simulator');
   };
 
   return (
@@ -163,7 +163,7 @@ export function LibraryView() {
                   {preset.name}
                 </h3>
                 <p className={styles.cardDescription}>
-                  {preset.description}
+                  {t(`library.presets.${preset.id}.description`, { defaultValue: preset.description })}
                 </p>
 
                 {/* Sensor indicators */}

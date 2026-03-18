@@ -276,6 +276,10 @@
   display: none;
 }
 
+.mobileSettingsPanel {
+  display: none;
+}
+
 @media (max-width: 1280px) {
   .pageContent {
     overflow-y: auto;
@@ -307,40 +311,68 @@
 }
 
 @media (max-width: 900px) {
+  .stageGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+  }
+
   .stagePanel {
-    overflow: visible;
-    padding-bottom: var(--space-md);
+    min-height: clamp(380px, 96vw, 620px);
+    aspect-ratio: 1 / 1.08;
+    overflow: hidden;
+    padding-bottom: 0;
   }
 
   .stageHeader {
-    position: static;
-    padding: var(--space-md) var(--space-md) 0;
-    pointer-events: auto;
+    position: absolute;
+    top: var(--space-md);
+    left: var(--space-md);
+    right: var(--space-md);
+    padding: 0;
+    pointer-events: none;
   }
 
   .canvasWrapper {
+    position: absolute;
+    inset: 0;
     flex: none;
     height: auto;
-    aspect-ratio: 1 / 1;
-    min-height: clamp(240px, 78vw, 420px);
-    margin: var(--space-sm) var(--space-md) var(--space-md);
-    border-radius: var(--radius-lg);
+    aspect-ratio: auto;
+    min-height: 0;
+    margin: 0;
+    border-radius: inherit;
   }
 
   .metricsPanel,
   .variantControls {
-    position: static;
-    left: auto;
-    right: auto;
-    bottom: auto;
+    position: absolute;
+    left: var(--space-md);
+    right: var(--space-md);
+    bottom: var(--space-md);
     width: auto;
-    margin: 0 var(--space-md);
+    margin: 0;
     padding: var(--space-md);
   }
 
   .leftOverlay,
   .rightOverlay {
     width: auto;
+  }
+
+  .mobileSettingsPanel {
+    display: flex;
+    position: static;
+    width: auto;
+    margin: 0;
+    align-self: stretch;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .desktopVariantControls {
+    display: none;
   }
 
   .variantControls {
@@ -363,6 +395,11 @@
 
   .stageGrid {
     gap: var(--space-md);
+  }
+
+  .stagePanel {
+    min-height: clamp(360px, 102vw, 560px);
+    aspect-ratio: 1 / 1.12;
   }
 
   .toolbarButton {
@@ -396,6 +433,16 @@
 
   .variantHeader {
     align-items: flex-start;
+  }
+
+  .metricsPanel,
+  .variantControls {
+    padding: 12px;
+    border-radius: var(--radius-md);
+  }
+
+  .leftOverlay {
+    display: none;
   }
 
   .variantControls {

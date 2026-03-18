@@ -8,7 +8,8 @@
     "compare": "Compare",
     "library": "Library",
     "saved": "Saved",
-    "settings": "Settings"
+    "settings": "Settings",
+    "credits": "Credit"
   },
   "lab": {
     "config": "Experiment Config",
@@ -32,10 +33,19 @@
     "timeScale": "Speed",
     "compareThis": "Send to Compare",
     "save": "Save",
+    "share": "Share",
+    "shareLink": "Share Link",
+    "copyLink": "Copy URL",
+    "showQr": "Show QR",
+    "hideQr": "Hide QR",
+    "nativeShare": "Share…",
+    "shareHint": "Open this Nema Lab experiment from the same simulator state.",
     "export": "Export JSON",
     "pendingChanges": "{{count}} pending changes",
     "noPendingChanges": "No pending changes",
-    "tracking": "Tracking"
+    "tracking": "Tracking",
+    "view2d": "2D",
+    "view3d": "3D"
   },
   "monitor": {
     "state": "State",
@@ -75,27 +85,123 @@
   "library": {
     "title": "Preset Library",
     "start": "Start Now",
-    "difficulty": "Difficulty"
+    "difficulty": "Difficulty",
+    "startPresetToast": "Starting {{preset}} preset.",
+    "presets": {
+      "food-seeking": {
+        "description": "A baseline preset with chemotaxis enabled. It shows how local sensory sampling alone can bias the worm toward food."
+      },
+      "touch-only": {
+        "description": "Touch sensing only. The worm can avoid obstacles, but it struggles to find food consistently."
+      },
+      "chemo-bias": {
+        "description": "A stronger chemotaxis condition with higher gradient gain, pulling the worm toward the food patch more quickly."
+      },
+      "thermal-belt": {
+        "description": "Combines a temperature gradient with a preferred temperature, producing behavior that tends to stay near a target band."
+      },
+      "blind-rover": {
+        "description": "All sensors are disabled and the worm moves by exploration alone, making it easy to compare how inefficient unguided motion can be."
+      },
+      "obstacle-field": {
+        "description": "A denser obstacle field designed to make touch-driven avoidance and turning events easier to observe."
+      }
+    }
   },
   "saved": {
     "title": "Saved Experiments",
     "empty": "No saved experiments.",
+    "emptyHint": "Saved runs from Simulator will appear here for quick reload and cleanup.",
+    "count": "{{count}} saved",
+    "latest": "Latest {{time}}",
+    "presetLabel": "Preset",
+    "seedLabel": "Seed",
     "load": "Load",
     "delete": "Delete",
     "clearAll": "Clear All"
   },
   "settings": {
     "title": "Settings",
+    "description": "Adjust interface behavior and manage saved experiment runs from one place.",
+    "preferencesEyebrow": "Preferences",
+    "preferencesTitle": "Interface & Accessibility",
+    "preferencesDescription": "Tune language, contrast, motion, and onboarding behavior for the way you work.",
+    "archiveEyebrow": "Saved Runs",
+    "archiveDescription": "Review, reload, or clear experiment snapshots stored locally on this device.",
     "highContrast": "High Contrast",
     "reducedMotion": "Reduced Motion",
     "showOnboarding": "Show Onboarding on Start",
     "compareDefaultLayout": "Compare Default Layout",
-    "language": "Language"
+    "language": "Language",
+    "languageOptionKorean": "Korean",
+    "languageOptionEnglish": "English",
+    "enabled": "On",
+    "disabled": "Off",
+    "activeSummary": "{{count}}/3 active"
+  },
+  "credits": {
+    "title": "Credit",
+    "description": "Project background, authorship, and a practical guide to reading the simulator, atlas, and comparison views.",
+    "projectSectionTitle": "Project Overview",
+    "projectEyebrow": "Project",
+    "projectTitle": "A research-framed sandbox for sensorimotor behavior",
+    "projectBody1": "Nema Lab is an interactive demo that reframes chemical cue response, thermal response, touch avoidance, and locomotion in C. elegans as a readable sensorimotor system, with a linked neural atlas visualized in real time.",
+    "projectBody2": "Within this app, the English labels \"C. elegans\" and \"nematodes\" are both used in the context of the same worm, 예쁜꼬마선충. Rather than aiming for a publication-grade biological reconstruction, it focuses on making the relationship between sensory cues, internal state, and observable movement legible across Simulator, Connectome, Synchrony, and Compare.",
+    "viewsEyebrow": "Views",
+    "viewsTitle": "Menu Guide",
+    "views": {
+      "items": {
+        "simulator": {
+          "title": "Simulator",
+          "body": "The main workspace for adjusting experiment settings, running the worm, and monitoring Tracking, State, and Sensor Summary in real time."
+        },
+        "connectome": {
+          "title": "Connectome",
+          "body": "An interpretation view that combines Live Inputs, Behavior Snapshot, Dominant Route, Neural Atlas, 2D View, and Selected Neuron."
+        },
+        "synchrony": {
+          "title": "Synchrony",
+          "body": "A synchronized monitoring view that aligns Tracking Camera, Neural Atlas, and Environment Arena to the same moment."
+        },
+        "compare": {
+          "title": "Compare",
+          "body": "A comparison view that places Baseline (A) and Variant (B) side by side under matched playback conditions."
+        },
+        "library": {
+          "title": "Library",
+          "body": "A preset browser for quickly launching representative behavior presets and using them as starting points for new experiments."
+        },
+        "settings": {
+          "title": "Settings",
+          "body": ""
+        }
+      }
+    },
+    "notesEyebrow": "Notes",
+    "notesTitle": "Scope and contact",
+    "notesDescription": "A few practical notes help set expectations for how the demo should be read.",
+    "notes": {
+      "items": {
+        "research": "This app is research-based and educational in tone. It is intended to support exploration and communication, not to replace experimental measurement or publication-grade modeling.",
+        "storage": "Saved runs are stored locally in the current browser environment, so they may not automatically transfer across devices or profiles.",
+        "contact": "Questions, feedback, or collaboration inquiries can be sent to the email listed above."
+      }
+    }
+  },
+  "connectome": {
+    "liveSensorimotorOverlay": "live sensorimotor overlay",
+    "liveInputs": "Live Inputs",
+    "behaviorSnapshot": "Behavior Snapshot",
+    "dominantRoute": "Dominant Route",
+    "currentScene": "Current Scene",
+    "environmentSimulation": "2D View",
+    "topActiveNeurons": "Top Active Neurons",
+    "selectedNeuron": "Selected Neuron"
   },
   "landing": {
     "title": "Nema Lab",
-    "subtitle": "C. elegans Sensorimotor Simulator",
-    "description": "See how three simple sensory rules produce purposeful behavior — hands on.",
+    "subtitle": "C. elegans Behavior & Neural Simulator",
+    "description": "Nema Lab is an interactive demo that reframes chemical cue response, thermal response, touch avoidance, and locomotion in C. elegans as a readable sensorimotor system, with a linked neural atlas visualized in real time.",
     "startNow": "Start Experiment",
     "browsePresets": "Browse Presets",
     "quickStart": "Quick Start",
@@ -108,6 +214,8 @@
     "configReset": "Config reset to defaults.",
     "runReset": "Run restarted with current config.",
     "saved": "Config saved locally.",
+    "linkCopied": "Share link copied.",
+    "linkCopyFailed": "Failed to copy the share link.",
     "loaded": "Saved experiment loaded.",
     "deleted": "Deleted.",
     "copiedToCompare": "Simulator config copied to Compare baseline."
@@ -160,6 +268,18 @@
     "showSensors": "Shows left/right sensor sample point positions",
     "showEventMarkers": "Marks collision, turn, and other event locations",
     "cleanMode": "Hides grid, borders, and other auxiliary elements for a clean view"
+  },
+  "tracking3d": {
+    "freeOrbit": "Custom View",
+    "resetView": "Reset View",
+    "controlsHint": "Drag to orbit, wheel to zoom, right-drag to pan",
+    "sceneNote": "NGM agar surface, OP50 lawn, shallow observation chamber",
+    "presets": {
+      "follow": "Follow View",
+      "side": "Side View",
+      "top": "Top View",
+      "overview": "Overview"
+    }
   },
   "params": {
     "baseSpeed": "Base Speed",

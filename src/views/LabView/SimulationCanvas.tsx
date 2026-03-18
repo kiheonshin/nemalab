@@ -2,7 +2,7 @@
 // SimulationCanvas — Canvas element that renders the worm simulation
 // ============================================================================
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useStore } from '../../store';
 import { renderSimulation, type RenderState, type Camera } from '../../renderer/CanvasRenderer';
 import styles from '../LabView.module.css';
@@ -11,8 +11,43 @@ export function SimulationCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const simInstance = useStore((s) => s.simInstance);
   const snapshot = useStore((s) => s.snapshot);
-  const running = useStore((s) => s.running);
   const trackingMode = useStore((s) => s.trackingMode);
+  const [layoutTick, setLayoutTick] = useState(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const target = canvas.parentElement ?? canvas;
+    let rafId = 0;
+
+    const refreshLayout = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setLayoutTick((tick) => tick + 1);
+      });
+    };
+
+    refreshLayout();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(() => {
+        refreshLayout();
+      });
+
+      observer.observe(target);
+      return () => {
+        observer.disconnect();
+        cancelAnimationFrame(rafId);
+      };
+    }
+
+    window.addEventListener('resize', refreshLayout);
+    return () => {
+      window.removeEventListener('resize', refreshLayout);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -66,7 +101,7 @@ export function SimulationCanvas() {
           }
         : {},
     );
-  }, [simInstance, snapshot, running, trackingMode]);
+  }, [simInstance, snapshot, trackingMode, layoutTick]);
 
   return (
     <canvas

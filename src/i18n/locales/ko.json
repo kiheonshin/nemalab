@@ -8,7 +8,8 @@
     "compare": "Compare",
     "library": "Library",
     "saved": "Saved",
-    "settings": "Settings"
+    "settings": "Settings",
+    "credits": "Credit"
   },
   "lab": {
     "config": "실험 설정",
@@ -32,10 +33,19 @@
     "timeScale": "속도",
     "compareThis": "Compare로 보내기",
     "save": "저장",
+    "share": "공유",
+    "shareLink": "공유 링크",
+    "copyLink": "URL 복사",
+    "showQr": "QR 보기",
+    "hideQr": "QR 숨기기",
+    "nativeShare": "공유하기",
+    "shareHint": "현재 Nema Lab 실험 상태를 같은 Simulator 조건으로 엽니다.",
     "export": "JSON 내보내기",
     "pendingChanges": "{{count}}개 변경사항 대기 중",
     "noPendingChanges": "변경사항 없음",
-    "tracking": "트래킹"
+    "tracking": "트래킹",
+    "view2d": "2D",
+    "view3d": "3D"
   },
   "monitor": {
     "state": "상태",
@@ -75,27 +85,122 @@
   "library": {
     "title": "프리셋 라이브러리",
     "start": "바로 시작",
-    "difficulty": "난이도"
+    "difficulty": "난이도",
+    "startPresetToast": "{{preset}} 프리셋으로 시작합니다.",
+    "presets": {
+      "food-seeking": {
+        "description": "화학 감각을 켠 기본 preset입니다. 국소 감각만으로도 먹이 방향으로 편향되는 경향을 보여줍니다."
+      },
+      "touch-only": {
+        "description": "촉각만 켠 상태입니다. 장애물 회피는 가능하지만 먹이를 안정적으로 찾기 어렵습니다."
+      },
+      "chemo-bias": {
+        "description": "화학 감각과 gradient gain을 높여, 먹이 패치로 더 빠르게 끌리는 조건입니다."
+      },
+      "thermal-belt": {
+        "description": "온도 기울기와 선호 온도를 함께 사용합니다. 특정 온도 띠를 따라 머무르는 행동을 볼 수 있습니다."
+      },
+      "blind-rover": {
+        "description": "감각을 모두 끄고 exploration만으로 움직입니다. 단순 이동이 얼마나 비효율적인지 비교할 수 있습니다."
+      },
+      "obstacle-field": {
+        "description": "장애물 밀도를 높여 촉각 기반 회피와 회전 이벤트를 집중적으로 관찰할 수 있습니다."
+      }
+    }
   },
   "saved": {
     "title": "저장된 실험",
     "empty": "저장된 실험이 없습니다.",
+    "emptyHint": "Simulator에서 저장한 실험이 여기에 모여 빠르게 다시 불러오고 정리할 수 있습니다.",
+    "count": "{{count}}개 저장됨",
+    "latest": "최근 저장 {{time}}",
+    "presetLabel": "프리셋",
+    "seedLabel": "시드",
     "load": "불러오기",
     "delete": "삭제",
     "clearAll": "모두 삭제"
   },
   "settings": {
     "title": "설정",
+    "description": "인터페이스 동작을 조정하고 저장된 실험을 한 곳에서 관리합니다.",
+    "preferencesEyebrow": "환경 설정",
+    "preferencesTitle": "인터페이스 및 접근성",
+    "preferencesDescription": "언어, 대비, 모션, 온보딩 표시 방식을 작업 흐름에 맞게 조정합니다.",
+    "archiveEyebrow": "실험 보관함",
+    "archiveDescription": "이 기기에 저장된 실험 기록을 검토하고, 다시 불러오거나 정리할 수 있습니다.",
     "highContrast": "고대비 모드",
     "reducedMotion": "모션 감소",
     "showOnboarding": "시작 시 온보딩 표시",
     "compareDefaultLayout": "Compare 기본 레이아웃",
-    "language": "언어"
+    "language": "언어",
+    "languageOptionKorean": "한국어",
+    "languageOptionEnglish": "English",
+    "enabled": "켜짐",
+    "disabled": "꺼짐",
+    "activeSummary": "{{count}}/3 활성"
+  },
+  "credits": {
+    "title": "크래딧",
+    "projectSectionTitle": "프로젝트 소개",
+    "projectEyebrow": "프로젝트",
+    "projectTitle": "감각-운동 행동을 읽기 위한 연구 기반 실험 샌드박스",
+    "projectBody1": "Nema Lab은 선충류(Nematodes)에서 그 이름을 따온 프로젝트로, 대표적 모델 생물인 예쁜꼬마선충(C. elegans)의 화학 물질 반응, 온도 반응, 촉각 회피, 이동 패턴을 읽기 쉬운 감각-운동 시스템으로 재구성한 인터랙티브 데모입니다. 복잡한 생물학적 데이터를 있는 그대로 모사하기보다, 누구나 쉽게 감각하고 반응할 수 있는 인터랙티브 시각화로 재구성했습니다. 감각 단서와 내부 상태, 그리고 관찰 가능한 움직임의 연결 고리를 Simulator, Connectome, Synchrony, Compare 네 가지 공간에서 선명하고 생동감 있게 조명합니다.",
+    "projectBody2": "",
+    "viewsEyebrow": "화면 안내",
+    "viewsTitle": "메뉴 설명",
+    "views": {
+      "items": {
+        "simulator": {
+          "title": "Simulator",
+          "body": "실험 설정을 조정하고 선충을 실행하며, 트래킹·상태·센서 요약을 실시간으로 확인하는 기본 작업 공간"
+        },
+        "connectome": {
+          "title": "Connectome",
+          "body": "실시간 입력, 행동 스냅샷, 우세 경로, 뉴런 지도, 2D 환경 뷰, 선택 뉴런을 함께 읽는 해석 화면"
+        },
+        "synchrony": {
+          "title": "Synchrony",
+          "body": "트래킹 카메라, 뉴런 지도, 환경 시뮬레이션을 같은 시점으로 맞춰 관찰하는 동기화 모니터링 화면"
+        },
+        "compare": {
+          "title": "Compare",
+          "body": "기준 (A)과 변형 (B)을 같은 재생 조건에서 나란히 비교하는 화면"
+        },
+        "library": {
+          "title": "Library",
+          "body": "대표 행동 프리셋을 빠르게 실행하고 새 실험의 출발점으로 삼는 프리셋 브라우저"
+        },
+        "settings": {
+          "title": "Settings",
+          "body": "언어, 고대비 모드, 모션 감소, 시작 시 온보딩 표시, 저장된 실험을 함께 관리하는 화면"
+        }
+      }
+    },
+    "notesEyebrow": "참고",
+    "notesTitle": "범위와 문의",
+    "notesDescription": "이 데모를 어떤 범위에서 읽어야 하는지 짧게 정리했습니다.",
+    "notes": {
+      "items": {
+        "research": "이 앱은 연구 기반의 교육용·설명용 데모입니다. 실제 실험 계측이나 논문 수준 모델링을 대체하기 위한 도구는 아닙니다.",
+        "storage": "저장된 실험은 현재 브라우저와 기기에 로컬로 보관되므로, 다른 환경으로 자동 동기화되지는 않을 수 있습니다.",
+        "contact": "문의, 피드백, 협업 제안은 위에 적힌 이메일로 보내실 수 있습니다."
+      }
+    }
+  },
+  "connectome": {
+    "liveSensorimotorOverlay": "실시간 감각-운동 오버레이",
+    "liveInputs": "실시간 입력",
+    "behaviorSnapshot": "행동 스냅샷",
+    "dominantRoute": "우세 경로",
+    "currentScene": "현재 장면",
+    "environmentSimulation": "2D 환경 뷰",
+    "topActiveNeurons": "상위 활성 뉴런",
+    "selectedNeuron": "선택 뉴런"
   },
   "landing": {
     "title": "Nema Lab",
-    "subtitle": "선충 감각-운동 시뮬레이터",
-    "description": "3개의 단순한 감각 규칙이 어떻게 목적적 행동을 만들어내는지 직접 확인하세요.",
+    "subtitle": "예쁜꼬마선충 행동·뉴런 시뮬레이터",
+    "description": "Nema Lab은 예쁜꼬마선충의 화학 물질 반응, 온도 반응, 촉각 회피, 이동 패턴을 읽기 쉬운 감각-운동 시스템으로 재구성하고, 연동된 뉴런 지도를 실시간 시각화하는 인터랙티브 데모입니다.",
     "startNow": "바로 실험 시작",
     "browsePresets": "프리셋 둘러보기",
     "quickStart": "바로 시작",
@@ -108,6 +213,8 @@
     "configReset": "Config를 기본값으로 초기화했습니다.",
     "runReset": "현재 적용된 조건으로 run을 재시작했습니다.",
     "saved": "현재 config를 로컬에 저장했습니다.",
+    "linkCopied": "공유 링크를 복사했습니다.",
+    "linkCopyFailed": "공유 링크를 복사하지 못했습니다.",
     "loaded": "저장된 실험을 불러왔습니다.",
     "deleted": "삭제되었습니다.",
     "copiedToCompare": "Lab의 현재 적용 config를 Compare 기준으로 복사했습니다."
@@ -160,6 +267,18 @@
     "showSensors": "좌/우 센서 샘플 포인트의 위치를 표시합니다",
     "showEventMarkers": "충돌, 회전 등 이벤트 발생 지점에 마커를 표시합니다",
     "cleanMode": "격자, 테두리 등 보조 요소를 숨겨 깔끔한 화면을 제공합니다"
+  },
+  "tracking3d": {
+    "freeOrbit": "커스텀 뷰",
+    "resetView": "기본 시점",
+    "controlsHint": "드래그 회전, 휠 확대, 오른쪽 드래그 이동",
+    "sceneNote": "NGM 한천 바닥, OP50 먹이 잔디, 얕은 관찰 챔버",
+    "presets": {
+      "follow": "추적 뷰",
+      "side": "측면 뷰",
+      "top": "탑뷰",
+      "overview": "전체 뷰"
+    }
   },
   "params": {
     "baseSpeed": "기본 속도",

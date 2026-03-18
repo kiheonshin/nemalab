@@ -43,6 +43,7 @@ export interface RenderState {
 
 export interface RenderOptions {
   suppressWorldBorder?: boolean;
+  suppressWorldCueBorder?: boolean;
   ambientBackdrop?: boolean;
   wormStyleScale?: number;
   sceneStyleScale?: number;
@@ -104,7 +105,7 @@ export function renderSimulation(
   const worldHeight = height - pad * 2;
   const worldBleed = options.ambientBackdrop
     ? Math.max(worldWidth, worldHeight) *
-      Math.max(2.4, (state.camera?.zoom ?? 1) * 1.45)
+      Math.max(4.8, (state.camera?.zoom ?? 1) * 2.2)
     : 0;
   const extendedWorldTopLeft = {
     x: worldTopLeft.x - worldBleed,
@@ -195,7 +196,7 @@ export function renderSimulation(
   }
 
   // --- Touch cue border ---
-  if (cueTouch > 0.01 || previewType === 'touch') {
+  if (!options.suppressWorldCueBorder && (cueTouch > 0.01 || previewType === 'touch')) {
     ctx.strokeStyle = `rgba(245, 201, 123, ${
       0.16 + cueTouch * 0.42 + (previewType === 'touch' ? 0.18 : 0)
     })`;

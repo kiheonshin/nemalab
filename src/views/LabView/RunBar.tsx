@@ -2,11 +2,20 @@
 // RunBar - Compact playback toolbox inside the simulation canvas
 // ============================================================================
 
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '../../store';
 import { trackEvent, EVENTS } from '../../analytics';
 import styles from '../LabView.module.css';
+
+interface RunBarProps {
+  running: boolean;
+  timeScale: number;
+  onToggleRunning: () => void;
+  onStep: () => void;
+  onResetRun: () => void;
+  onTimeScaleChange: (scale: number) => void;
+}
 
 function IconPlay() {
   return (
@@ -110,18 +119,18 @@ function ToolButton({
   );
 }
 
-export function RunBar() {
+export function RunBar({
+  running,
+  timeScale,
+  onToggleRunning,
+  onStep,
+  onResetRun,
+  onTimeScaleChange,
+}: RunBarProps) {
   const { t } = useTranslation();
-  const running = useStore((s) => s.running);
-  const timeScale = useStore((s) => s.timeScale);
   const appliedSeed = useStore((s) => s.appliedSeed);
   const appliedConfig = useStore((s) => s.appliedConfig);
   const snapshot = useStore((s) => s.snapshot);
-  const setRunning = useStore((s) => s.setRunning);
-  const setTimeScale = useStore((s) => s.setTimeScale);
-  const resetRun = useStore((s) => s.resetRun);
-  const resetSimulation = useStore((s) => s.resetSimulation);
-  const stepSimulation = useStore((s) => s.stepSimulation);
   const trackingMode = useStore((s) => s.trackingMode);
   const setTrackingMode = useStore((s) => s.setTrackingMode);
   const saveRun = useStore((s) => s.saveRun);
@@ -129,24 +138,17 @@ export function RunBar() {
 
   const handlePlayPause = () => {
     trackEvent(running ? EVENTS.SIM_PAUSE : EVENTS.SIM_START);
-    setRunning(!running);
-  };
-
-  const handleStep = () => {
-    setRunning(false);
-    stepSimulation(1 / 60);
-  };
-
-  const handleResetRun = () => {
-    trackEvent(EVENTS.SIM_RESET);
-    resetRun();
-    resetSimulation();
-    showToast(t('toast.runReset'));
+    onToggleRunning();
   };
 
   const handleSave = () => {
     const name = new Date().toLocaleString();
     saveRun(name, appliedConfig, appliedSeed, snapshot?.metrics ?? null);
+    trackEvent(EVENTS.EXPERIMENT_SAVE, {
+      preset_name: appliedConfig.presetName || 'custom',
+      elapsed_seconds: Math.round(snapshot?.metrics.elapsed ?? 0),
+      event_count: snapshot?.metrics.eventCount ?? 0,
+    });
     showToast(t('toast.saved'));
   };
 
@@ -160,8 +162,8 @@ export function RunBar() {
             active={running}
             onClick={handlePlayPause}
           />
-          <ToolButton label={t('lab.step')} icon={<IconStep />} onClick={handleStep} />
-          <ToolButton label={t('lab.resetRun')} icon={<IconReset />} onClick={handleResetRun} />
+          <ToolButton label={t('lab.step')} icon={<IconStep />} onClick={onStep} />
+          <ToolButton label={t('lab.resetRun')} icon={<IconReset />} onClick={onResetRun} />
           <ToolButton label={t('lab.save')} icon={<IconSave />} onClick={handleSave} />
           <ToolButton
             label={t('lab.tracking')}
@@ -181,7 +183,7 @@ export function RunBar() {
                 max={4}
                 step={0.5}
                 value={timeScale}
-                onChange={(e) => setTimeScale(Number(e.target.value))}
+                onChange={(e) => onTimeScaleChange(Number(e.target.value))}
                 className={styles.toolboxSpeedSlider}
                 aria-label={t('lab.timeScale')}
               />

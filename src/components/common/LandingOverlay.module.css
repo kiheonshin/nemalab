@@ -56,6 +56,26 @@
   margin-top: var(--space-sm);
 }
 
+.footerMeta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-top: var(--space-sm);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(173, 190, 222, 0), rgba(173, 190, 222, 0.16), rgba(173, 190, 222, 0));
+}
+
+.overlayCredits {
+  justify-content: center;
+  text-align: center;
+  padding: 0;
+}
+
 .primaryBtn {
   width: 100%;
   padding: var(--space-md) var(--space-xl);

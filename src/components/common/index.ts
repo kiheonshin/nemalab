@@ -13,4 +13,8 @@ export type { ToggleProps } from './Toggle';
 export { Slider } from './Slider';
 export type { SliderProps } from './Slider';
 
+export { AppCredits } from './AppCredits';
+
 export { ToastContainer } from './Toast';
+
+export { WormTracking3D } from './WormTracking3D';

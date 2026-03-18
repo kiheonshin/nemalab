@@ -9,6 +9,21 @@ import type { SimConfig } from '../engine/types';
 import { PRESETS, DEFAULT_CONFIG } from '../engine/constants';
 import { mergeDeep, deepClone } from '../engine/math';
 
+function encodeBase64Utf8(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = '';
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
+}
+
+function decodeBase64Utf8(value: string): string {
+  const binary = atob(value);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -52,7 +67,12 @@ export function parseDeepLink(searchParams: URLSearchParams): DeepLinkResult {
   const configParam = searchParams.get('config');
   if (configParam) {
     try {
-      const decoded = atob(configParam);
+      let decoded = '';
+      try {
+        decoded = decodeBase64Utf8(configParam);
+      } catch {
+        decoded = atob(configParam);
+      }
       const parsed = JSON.parse(decoded);
 
       // Validate it has at least the shape of a SimConfig
@@ -126,7 +146,7 @@ export function generateDeepLink(config: SimConfig, seed: string): string {
 
   // Encode config as base64 JSON
   const json = JSON.stringify(config);
-  const base64 = btoa(json);
+  const base64 = encodeBase64Utf8(json);
   params.set('config', base64);
 
   if (seed) {
@@ -152,4 +172,16 @@ export function generatePresetDeepLink(presetId: string, seed?: string): string 
   }
 
   return `?${params.toString()}`;
+}
+
+export function buildAbsoluteDeepLink(search: string, path = '/simulator'): string {
+  if (typeof window === 'undefined') {
+    return `${path}${search}`;
+  }
+
+  return `${window.location.origin}${window.location.pathname}#${path}${search}`;
+}
+
+export function buildAbsoluteConfigDeepLink(config: SimConfig, seed: string): string {
+  return buildAbsoluteDeepLink(generateDeepLink(config, seed));
 }

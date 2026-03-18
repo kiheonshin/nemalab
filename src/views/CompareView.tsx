@@ -2,78 +2,17 @@
 // CompareView - A/B side-by-side simulation comparison
 // ============================================================================
 
-import { type ReactNode, useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Slider } from '../components/common';
 import { PageLayout } from '../components/layout';
 import { useStore } from '../store';
 import { useAnimationFrame } from '../hooks/useAnimationFrame';
+import { trackEvent, EVENTS } from '../analytics';
 import { renderSimulation, type RenderState } from '../renderer/CanvasRenderer';
 import { formatNumber, timeLabel } from '../engine/math';
 import type { Metrics, Snapshot } from '../engine/types';
 import styles from './CompareView.module.css';
-
-function IconPlay() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M6 4.5L15 10L6 15.5V4.5Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-function IconPause() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <rect x="5" y="4.5" width="3.5" height="11" rx="1" fill="currentColor" />
-      <rect x="11.5" y="4.5" width="3.5" height="11" rx="1" fill="currentColor" />
-    </svg>
-  );
-}
-
-function IconReset() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path
-        d="M6.3 7.1A5.4 5.4 0 1110 15.4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <path
-        d="M6.6 3.8V7.5H10.3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ToolbarButton({
-  label,
-  icon,
-  active = false,
-  onClick,
-}: {
-  label: string;
-  icon: ReactNode;
-  active?: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      className={`${styles.toolbarButton} ${active ? styles.toolbarButtonActive : ''}`}
-      onClick={onClick}
-    >
-      <span className={styles.toolbarButtonIcon}>{icon}</span>
-      <span className={styles.toolbarButtonLabel}>{label}</span>
-    </button>
-  );
-}
 
 function StageCanvas({
   sim,
@@ -120,18 +59,21 @@ function MetricsDisplay({
   metrics,
   t,
   className,
+  showLabel = true,
 }: {
-  label: string;
+  label?: string;
   metrics: Metrics | null;
   t: (key: string, params?: Record<string, unknown>) => string;
   className?: string;
+  showLabel?: boolean;
 }) {
   const classes = [styles.metricsPanel, className].filter(Boolean).join(' ');
+  const hasLabel = showLabel && Boolean(label?.trim());
 
   if (!metrics) {
     return (
       <div className={classes}>
-        <div className={styles.metricsPanelTitle}>{label}</div>
+        {hasLabel ? <div className={styles.metricsPanelTitle}>{label}</div> : null}
         <div className={styles.metricRow}>
           <span className={styles.metricLabel}>--</span>
         </div>
@@ -141,9 +83,11 @@ function MetricsDisplay({
 
   return (
     <div className={classes}>
-      <div className={styles.metricsHeader}>
-        <div className={styles.metricsPanelTitle}>{label}</div>
-      </div>
+      {hasLabel ? (
+        <div className={styles.metricsHeader}>
+          <div className={styles.metricsPanelTitle}>{label}</div>
+        </div>
+      ) : null}
       <div className={styles.metricsGrid}>
         <div className={styles.metricRow}>
           <span className={styles.metricLabel}>{t('monitor.elapsed')}</span>
@@ -190,6 +134,17 @@ function VariantControlPanel({
 
   const dirty = compareDirtyPaths.size > 0;
   const classes = [styles.variantControls, className].filter(Boolean).join(' ');
+  const dirtyFields = Array.from(compareDirtyPaths);
+
+  const handleApply = () => {
+    if (!dirty) return;
+
+    trackEvent(EVENTS.COMPARE_VARIANT_CHANGE, {
+      field_count: dirtyFields.length,
+      fields: dirtyFields.join(','),
+    });
+    applyVariant();
+  };
 
   return (
     <div className={classes}>
@@ -198,7 +153,7 @@ function VariantControlPanel({
         <Button
           variant="primary"
           size="small"
-          onClick={applyVariant}
+          onClick={handleApply}
           disabled={!dirty}
         >
           {t('lab.apply')}
@@ -266,16 +221,13 @@ function VariantControlPanel({
 export function CompareView() {
   const { t, i18n } = useTranslation();
   const compareRunning = useStore((s) => s.compareRunning);
-  const setCompareRunning = useStore((s) => s.setCompareRunning);
   const compareTimeScale = useStore((s) => s.compareTimeScale);
-  const setCompareTimeScale = useStore((s) => s.setCompareTimeScale);
   const simA = useStore((s) => s.simA);
   const simB = useStore((s) => s.simB);
   const snapshotA = useStore((s) => s.snapshotA);
   const snapshotB = useStore((s) => s.snapshotB);
   const initCompareSimulations = useStore((s) => s.initCompareSimulations);
   const stepCompare = useStore((s) => s.stepCompare);
-  const resetCompare = useStore((s) => s.resetCompare);
   const isKorean = i18n.language.startsWith('ko');
   const baselineLabel = isKorean ? '기준 (A)' : 'Baseline (A)';
   const settingsLabel = isKorean ? '실험 설정' : 'Experiment Settings';
@@ -310,62 +262,29 @@ export function CompareView() {
 
   useAnimationFrame(onFrame, compareRunning && simA !== null && simB !== null);
 
-  const handleToggleRun = () => setCompareRunning(!compareRunning);
-  const speedTicks = ['0.5x', '4x'];
-
   return (
     <PageLayout
       eyebrow={t('nav.compare')}
       title={t('compare.title')}
-      actions={
-        <div className={styles.toolbar}>
-          <div className={styles.controlBar}>
-            <ToolbarButton
-              label={compareRunning ? t('lab.pause') : t('compare.runBoth')}
-              icon={compareRunning ? <IconPause /> : <IconPlay />}
-              active={compareRunning}
-              onClick={handleToggleRun}
-            />
-            <ToolbarButton
-              label={t('lab.resetRun')}
-              icon={<IconReset />}
-              onClick={resetCompare}
-            />
-            <div className={styles.speedField}>
-              <div className={styles.speedFieldBody}>
-                <div className={styles.speedSliderRow}>
-                  <span className={styles.speedScaleValue}>{speedTicks[0]}</span>
-                  <input
-                    type="range"
-                    min={0.5}
-                    max={4}
-                    step={0.5}
-                    value={compareTimeScale}
-                    onChange={(e) => setCompareTimeScale(Number(e.target.value))}
-                    className={styles.speedSlider}
-                    aria-label={t('lab.timeScale')}
-                  />
-                  <span className={styles.speedScaleValue}>{speedTicks[1]}</span>
-                </div>
-                <span className={styles.toolbarButtonLabel}>{t('lab.timeScale')}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
       contentClassName={styles.pageContent}
     >
       <div className={styles.stageGrid}>
+        <VariantControlPanel
+          title={settingsLabel}
+          t={t}
+          className={styles.mobileSettingsPanel}
+        />
+
         <div className={styles.stagePanel}>
           <div className={styles.stageHeader}>
             <span className={styles.stageTitle}>{t('compare.baseline')}</span>
-            <span className={styles.stageLabel}>A</span>
           </div>
           <div className={styles.canvasWrapper}>
             <StageCanvas sim={simA} snapshot={snapshotA} />
           </div>
           <MetricsDisplay
             label={baselineLabel}
+            showLabel={false}
             metrics={snapshotA?.metrics ?? null}
             t={t}
             className={styles.leftOverlay}
@@ -375,7 +294,6 @@ export function CompareView() {
         <div className={styles.stagePanel}>
           <div className={styles.stageHeader}>
             <span className={styles.stageTitle}>{t('compare.variant')}</span>
-            <span className={styles.stageLabel}>B</span>
           </div>
           <div className={styles.canvasWrapper}>
             <StageCanvas sim={simB} snapshot={snapshotB} />
@@ -383,7 +301,7 @@ export function CompareView() {
           <VariantControlPanel
             title={settingsLabel}
             t={t}
-            className={styles.rightOverlay}
+            className={`${styles.rightOverlay} ${styles.desktopVariantControls}`}
           />
         </div>
       </div>

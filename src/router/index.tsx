@@ -1,4 +1,4 @@
-import { Routes, Route, useSearchParams } from 'react-router-dom';
+import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { LabView } from '../views/LabView';
 import { useStore } from '../store';
@@ -7,8 +7,8 @@ import { parseDeepLink } from './deeplink';
 const CompareView = lazy(() =>
   import('../views/CompareView').then((m) => ({ default: m.CompareView })),
 );
-const ConnectomeView = lazy(() =>
-  import('../views/ConnectomeView').then((m) => ({ default: m.ConnectomeView })),
+const Connectome2View = lazy(() =>
+  import('../views/Connectome2View').then((m) => ({ default: m.Connectome2View })),
 );
 const NexusView = lazy(() =>
   import('../views/NexusView').then((m) => ({ default: m.NexusView })),
@@ -16,11 +16,11 @@ const NexusView = lazy(() =>
 const LibraryView = lazy(() =>
   import('../views/LibraryView').then((m) => ({ default: m.LibraryView })),
 );
-const SavedView = lazy(() =>
-  import('../views/SavedView').then((m) => ({ default: m.SavedView })),
-);
 const SettingsView = lazy(() =>
   import('../views/SettingsView').then((m) => ({ default: m.SettingsView })),
+);
+const CreditsView = lazy(() =>
+  import('../views/CreditsView').then((m) => ({ default: m.CreditsView })),
 );
 
 function LoadingFallback() {
@@ -113,18 +113,26 @@ function LabViewWithDeepLink() {
   return <LabView />;
 }
 
+function EntryRoute() {
+  return null;
+}
+
 export function AppRouter() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Routes>
-        <Route path="/" element={<LabViewWithDeepLink />} />
+        <Route path="/" element={<EntryRoute />} />
+        <Route path="/simulator" element={<LabViewWithDeepLink />} />
         <Route path="/compare" element={<CompareView />} />
-        <Route path="/connectome" element={<ConnectomeView />} />
+        <Route path="/connectome" element={<Connectome2View />} />
+        <Route path="/connectome2" element={<Connectome2View />} />
         <Route path="/synchrony" element={<NexusView />} />
         <Route path="/nexus" element={<NexusView />} />
         <Route path="/library" element={<LibraryView />} />
-        <Route path="/saved" element={<SavedView />} />
+        <Route path="/saved" element={<Navigate to="/settings" replace />} />
         <Route path="/settings" element={<SettingsView />} />
+        <Route path="/credit" element={<Navigate to="/credits" replace />} />
+        <Route path="/credits" element={<CreditsView />} />
       </Routes>
     </Suspense>
   );

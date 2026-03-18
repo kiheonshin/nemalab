@@ -1,11 +1,11 @@
 // ============================================================================
-// SavedView — Saved experiments list
+// SavedView - Saved experiments list
 // ============================================================================
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button } from '../components/common';
+import { AppCredits, Card, Button } from '../components/common';
 import { PageLayout } from '../components/layout';
 import { useStore } from '../store';
 import { deepClone } from '../engine/math';
@@ -38,7 +38,7 @@ export function SavedView() {
     });
     createSimulation(run.config, run.seed);
     showToast(t('toast.loaded'));
-    navigate('/');
+    navigate('/simulator');
   };
 
   const handleDelete = (id: string) => {
@@ -50,10 +50,12 @@ export function SavedView() {
     <PageLayout
       eyebrow={t('nav.saved')}
       title={t('saved.title')}
+      headerClassName={styles.savedPageHeader}
+      actionsClassName={styles.savedPageHeaderActions}
       actions={
         savedRuns.length > 0 ? (
           <div className={styles.toolbar}>
-            <Button variant="ghost" size="small" onClick={clearAllRuns}>
+            <Button variant="secondary" size="small" onClick={clearAllRuns}>
               {t('saved.clearAll')}
             </Button>
           </div>
@@ -61,12 +63,9 @@ export function SavedView() {
       }
       contentClassName={styles.pageContent}
     >
-
       {savedRuns.length === 0 ? (
         <Card className={styles.emptyState}>
-          <p>
-            {t('saved.empty')}
-          </p>
+          <p>{t('saved.empty')}</p>
         </Card>
       ) : (
         <div className={styles.grid}>
@@ -75,12 +74,8 @@ export function SavedView() {
               <div className={styles.cardBody}>
                 <div className={styles.headerBlock}>
                   <span className={styles.presetLabel}>{run.config.presetName || 'Lab'}</span>
-                  <h3 className={styles.cardTitle}>
-                    {run.name}
-                  </h3>
-                  <p className={styles.meta}>
-                    {new Date(run.createdAt).toLocaleString()}
-                  </p>
+                  <h3 className={styles.cardTitle}>{run.name}</h3>
+                  <p className={styles.meta}>{new Date(run.createdAt).toLocaleString()}</p>
                 </div>
 
                 <div className={styles.summaryList}>
@@ -123,6 +118,8 @@ export function SavedView() {
           ))}
         </div>
       )}
+
+      <AppCredits className={styles.creditsBlock} />
     </PageLayout>
   );
 }

@@ -1,6 +1,5 @@
 /* ===== LabView — 3-column layout ===== */
 
-/* App-wide viewport frame: all pages share this height constraint */
 .labLayout {
   display: grid;
   grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--right-rail-width);
@@ -394,6 +393,48 @@
   gap: var(--space-sm);
 }
 
+.trackingModeOverlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trackingModeButton {
+  min-width: 50px;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid rgba(173, 190, 222, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-dim);
+  font-family: var(--font-stack);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.trackingModeButton:hover {
+  transform: translateY(-1px);
+  color: var(--color-text);
+  border-color: rgba(125, 226, 207, 0.28);
+  background: rgba(125, 226, 207, 0.08);
+}
+
+.trackingModeButtonActive {
+  color: var(--color-accent);
+  border-color: rgba(125, 226, 207, 0.34);
+  background: rgba(125, 226, 207, 0.12);
+}
+
 .monitorTitle {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
@@ -605,5 +646,17 @@
   .trackingCanvasFrame,
   .trackingCanvas {
     min-height: 148px;
+  }
+
+  .trackingModeOverlay {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  .trackingModeButton {
+    min-width: 46px;
+    height: 28px;
+    padding: 0 10px;
   }
 }

@@ -1,27 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Connectome2Atlas } from '../components/common/Connectome2Atlas';
+import { WormTracking3D } from '../components/common/WormTracking3D';
 import { PageLayout } from '../components/layout';
-import { cElegans302Atlas } from '../data/cElegans302Atlas';
 import { LEGEND_ITEMS } from '../engine/constants';
-import { buildConnectomeFrame, describeConnectomeNeuron } from '../engine/connectome';
+import {
+  buildConnectome2Frame,
+  describeConnectome2Neuron,
+} from '../engine/connectome2';
 import { deepClone } from '../engine/math';
 import type { Snapshot } from '../engine/types';
 import { useAnimationFrame } from '../hooks/useAnimationFrame';
 import { renderSimulation, type Camera, type RenderState } from '../renderer/CanvasRenderer';
 import { useStore } from '../store';
 import styles from './NexusView.module.css';
-
-const VIEWBOX_WIDTH = 980;
-const VIEWBOX_HEIGHT = 580;
-const PADDING_X = 78;
-const BODY_TOP = 90;
-const BODY_BOTTOM = 88;
-const BODY_WIDTH = VIEWBOX_WIDTH - PADDING_X * 2;
-const BODY_HEIGHT = VIEWBOX_HEIGHT - BODY_TOP - BODY_BOTTOM;
-const REGION_Y = 22;
-const REGION_HEIGHT = VIEWBOX_HEIGHT - 46;
-const AXIS_LABEL_Y = 16;
-const FOOT_LABEL_Y = 572;
 
 function stateLabelFor(isKorean: boolean, state: Snapshot['state'] | null) {
   if (state === 'cruise') return isKorean ? '전진' : 'Cruise';
@@ -30,21 +22,9 @@ function stateLabelFor(isKorean: boolean, state: Snapshot['state'] | null) {
   return isKorean ? '대기' : 'Idle';
 }
 
-function connectionColor(family: 'sensory' | 'integration' | 'motor') {
-  if (family === 'sensory') return 'rgba(125, 226, 207, 0.82)';
-  if (family === 'integration') return 'rgba(156, 184, 255, 0.82)';
-  return 'rgba(245, 201, 123, 0.88)';
-}
-
-function neuronPoint(name: string) {
-  const entry = cElegans302Atlas.find((item) => item.name === name);
-  if (!entry) return null;
-
-  return {
-    x: PADDING_X + entry.projection.dorsal.x * BODY_WIDTH,
-    y: BODY_TOP + entry.projection.dorsal.y * BODY_HEIGHT,
-    entry,
-  };
+function formatSignedPercent(value: number) {
+  const rounded = Math.round(value * 100);
+  return `${rounded > 0 ? '+' : ''}${rounded}%`;
 }
 
 function EnvironmentCanvas({
@@ -61,7 +41,11 @@ function EnvironmentCanvas({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    renderSimulation(ctx, canvas, renderState);
+    renderSimulation(ctx, canvas, renderState, {
+      suppressWorldBorder: true,
+      suppressWorldCueBorder: true,
+      ambientBackdrop: true,
+    });
   }, [renderState]);
 
   return (
@@ -110,6 +94,7 @@ function TrackingCanvas({
 
     renderSimulation(ctx, canvas, trackedRenderState, {
       suppressWorldBorder: true,
+      suppressWorldCueBorder: true,
       ambientBackdrop: true,
       wormStyleScale: 1 / camera.zoom,
       sceneStyleScale: 1 / camera.zoom,
@@ -119,141 +104,6 @@ function TrackingCanvas({
   return <canvas ref={canvasRef} className={styles.trackingCanvas} aria-label="Tracking view" />;
 }
 
-function NeuralAtlas({
-  frame,
-  selectedNeuron,
-  setSelectedNeuron,
-}: {
-  frame: ReturnType<typeof buildConnectomeFrame>;
-  selectedNeuron: string;
-  setSelectedNeuron: (name: string) => void;
-}) {
-  return (
-    <svg
-      viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
-      className={styles.neuralSvg}
-      role="img"
-      aria-label="C. elegans neural atlas"
-    >
-      <rect
-        x="54"
-        y={REGION_Y}
-        width="250"
-        height={REGION_HEIGHT}
-        rx="26"
-        fill="rgba(125, 226, 207, 0.04)"
-        stroke="rgba(125, 226, 207, 0.12)"
-      />
-      <rect
-        x="304"
-        y={REGION_Y}
-        width="392"
-        height={REGION_HEIGHT}
-        rx="26"
-        fill="rgba(156, 184, 255, 0.03)"
-        stroke="rgba(156, 184, 255, 0.10)"
-      />
-      <rect
-        x="696"
-        y={REGION_Y}
-        width="230"
-        height={REGION_HEIGHT}
-        rx="26"
-        fill="rgba(245, 201, 123, 0.04)"
-        stroke="rgba(245, 201, 123, 0.10)"
-      />
-
-      {frame.pathways.map((pathway) => {
-        const from = neuronPoint(pathway.from);
-        const to = neuronPoint(pathway.to);
-        if (!from || !to) return null;
-
-        return (
-          <line
-            key={pathway.id}
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
-            stroke={connectionColor(pathway.family)}
-            strokeWidth={1.8 + pathway.strength * 3.4}
-            strokeLinecap="round"
-            opacity={0.28 + pathway.strength * 0.66}
-          />
-        );
-      })}
-
-      {cElegans302Atlas.map((entry) => {
-        const x = PADDING_X + entry.projection.dorsal.x * BODY_WIDTH;
-        const y = BODY_TOP + entry.projection.dorsal.y * BODY_HEIGHT;
-        const activation = frame.activities[entry.name] ?? 0;
-        const isHighlighted =
-          frame.highlightedNames.includes(entry.name) || entry.name === selectedNeuron;
-        const radius = 2.4 + activation * 5.6 + (isHighlighted ? 1.2 : 0);
-        const fill =
-          activation > 0.72
-            ? '#7DE2CF'
-            : activation > 0.48
-              ? '#9CB8FF'
-              : activation > 0.28
-                ? '#F5C97B'
-                : 'rgba(195, 208, 240, 0.34)';
-
-        return (
-          <circle
-            key={entry.name}
-            cx={x}
-            cy={y}
-            r={radius}
-            fill={fill}
-            stroke={isHighlighted ? 'rgba(255,255,255,0.92)' : 'rgba(6,8,12,0.92)'}
-            strokeWidth={isHighlighted ? 1.4 : 0.7}
-            className={styles.neuralNode}
-            onClick={() => setSelectedNeuron(entry.name)}
-          />
-        );
-      })}
-
-      {frame.highlightedNames.slice(0, 8).map((name) => {
-        const point = neuronPoint(name);
-        if (!point) return null;
-
-        const anchor = point.x > VIEWBOX_WIDTH - 180 ? 'end' : 'start';
-        const dx = anchor === 'end' ? -10 : 10;
-        return (
-          <text
-            key={`label-${name}`}
-            x={point.x + dx}
-            y={point.y - 9}
-            textAnchor={anchor}
-            className={styles.neuralNodeLabel}
-          >
-            {name}
-          </text>
-        );
-      })}
-
-      <g>
-        <text x="179" y={AXIS_LABEL_Y} textAnchor="middle" className={styles.neuralAxisLabel}>
-          Head sensory ring
-        </text>
-        <text x="500" y={AXIS_LABEL_Y} textAnchor="middle" className={styles.neuralAxisLabel}>
-          Integration + command
-        </text>
-        <text x="811" y={AXIS_LABEL_Y} textAnchor="middle" className={styles.neuralAxisLabel}>
-          Motor output
-        </text>
-        <text x="80" y={FOOT_LABEL_Y} className={styles.neuralFootLabel}>
-          Head
-        </text>
-        <text x="902" y={FOOT_LABEL_Y} textAnchor="end" className={styles.neuralFootLabel}>
-          Tail
-        </text>
-      </g>
-    </svg>
-  );
-}
-
 export function NexusView() {
   const { i18n } = useTranslation();
   const simInstance = useStore((s) => s.simInstance);
@@ -261,8 +111,6 @@ export function NexusView() {
   const simRunning = useStore((s) => s.simRunning);
   const appliedConfig = useStore((s) => s.appliedConfig);
   const appliedSeed = useStore((s) => s.appliedSeed);
-  const running = useStore((s) => s.running);
-  const timeScale = useStore((s) => s.timeScale);
   const createSimulation = useStore((s) => s.createSimulation);
   const stepSimulation = useStore((s) => s.stepSimulation);
   const updateSnapshot = useStore((s) => s.updateSnapshot);
@@ -290,7 +138,7 @@ export function NexusView() {
 
   const onFrame = useCallback(
     (dt: number) => {
-      const scaledDt = dt * timeScale;
+      const scaledDt = dt;
       const fixedStep = 1 / 60;
       let remaining = scaledDt;
 
@@ -303,10 +151,10 @@ export function NexusView() {
         stepSimulation(remaining);
       }
     },
-    [stepSimulation, timeScale],
+    [stepSimulation],
   );
 
-  useAnimationFrame(onFrame, running && simRunning && simInstance !== null);
+  useAnimationFrame(onFrame, simRunning && simInstance !== null);
 
   const nexusViewState = useMemo(() => {
     if (!simInstance || !snapshot) return null;
@@ -327,7 +175,7 @@ export function NexusView() {
     return {
       snapshot: serialized.snapshot,
       renderState,
-      frame: buildConnectomeFrame(simInstance, serialized.snapshot),
+      frame: buildConnectome2Frame(simInstance, serialized.snapshot),
     };
   }, [simInstance, snapshot]);
 
@@ -344,11 +192,11 @@ export function NexusView() {
 
   const selectedInfo = useMemo(() => {
     if (!frame) return null;
-    const active = frame.topNeurons.find((item) => item.name === selectedNeuron);
-    const detail = describeConnectomeNeuron(selectedNeuron);
+    const detail = describeConnectome2Neuron(selectedNeuron);
     return {
       ...detail,
-      activation: frame.activities[selectedNeuron] ?? active?.activation ?? 0,
+      activation: Math.abs(frame.activities[selectedNeuron] ?? 0),
+      signedActivity: frame.activities[selectedNeuron] ?? 0,
     };
   }, [frame, selectedNeuron]);
 
@@ -369,6 +217,8 @@ export function NexusView() {
     );
   }
 
+  const liveState = simInstance.getState();
+
   return (
     <PageLayout title="" hideHeader contentClassName={styles.pageContent}>
       <div className={styles.workspace}>
@@ -376,64 +226,85 @@ export function NexusView() {
           <section className={`${styles.panel} ${styles.neuralPanel}`}>
             <div className={styles.panelHeader}>
               <div>
-                <span className={styles.panelEyebrow}>302-Neuron Atlas</span>
-                <h2 className={styles.panelTitle}>Neural Atlas</h2>
-                <p className={styles.panelDescription}>
-                  Live atlas view of the same run, highlighting the sensory, interneuron, and
-                  motor activity shaping the current behavior.
-                </p>
+                <span className={styles.panelEyebrow}>
+                  {isKorean ? '302개 뉴런 지도' : '302-Neuron Atlas'}
+                </span>
+                <h2 className={styles.panelTitle}>{isKorean ? '뉴런 지도' : 'Neural Atlas'}</h2>
               </div>
               <span className={styles.panelMeta}>
                 {selectedInfo
-                  ? `${selectedInfo.name} · ${Math.round(selectedInfo.activation * 100)}%`
+                  ? `${selectedInfo.name} · ${formatSignedPercent(selectedInfo.signedActivity)}`
                   : '302 atlas'}
               </span>
             </div>
 
             <div className={styles.neuralFrame}>
-              <NeuralAtlas
+              <Connectome2Atlas
                 frame={frame}
                 selectedNeuron={selectedNeuron}
                 setSelectedNeuron={setSelectedNeuron}
+                wrapperClassName={styles.neuralViewport}
+                enablePan
+                classNames={{
+                  svg: styles.neuralSvg,
+                  node: styles.neuralNode,
+                  nodeLabel: styles.neuralNodeLabel,
+                  axisLabel: styles.neuralAxisLabel,
+                  footLabel: styles.neuralFootLabel,
+                }}
+                highlightedLabelLimit={10}
               />
             </div>
           </section>
 
-          <section className={`${styles.panel} ${styles.trackingPanel}`}>
-            <div className={styles.panelHeader}>
-              <div>
-                <span className={styles.panelEyebrow}>Head-Centered Camera</span>
-                <h2 className={styles.panelTitle}>Tracking Camera</h2>
-                <p className={styles.panelDescription}>
-                  Focused live camera of the same worm and the same moment, aligned with both the
-                  atlas view and the full arena state.
-                </p>
-              </div>
-              <span className={styles.statePill}>{currentStateLabel}</span>
+          <section className={`${styles.panel} ${styles.trackingPanel} ${styles.bleedPanel}`}>
+            <div className={styles.trackingFrame}>
+              <WormTracking3D
+                className={styles.trackingCanvas}
+                worm={liveState.worm}
+                world={liveState.world}
+                snapshot={linkedSnapshot}
+                config={linkedRenderState.config}
+                eventMarkers={linkedRenderState.eventMarkers}
+                defaultPreset="follow"
+                overlayTop="84px"
+                showTemperatureField={
+                  linkedRenderState.config.world.temperatureMode !== 'none' &&
+                  linkedRenderState.config.visuals.showTemperatureOverlay
+                }
+                fallback={<TrackingCanvas renderState={linkedRenderState} />}
+              />
             </div>
 
-            <div className={styles.trackingFrame}>
-              <TrackingCanvas renderState={linkedRenderState} />
+            <div className={`${styles.panelHeader} ${styles.bleedHeader}`}>
+              <div className={styles.panelHeaderCopy}>
+                <span className={styles.panelEyebrow}>
+                  {isKorean ? '머리 중심 추적 시점' : 'Head-Centered Camera'}
+                </span>
+                <h2 className={styles.panelTitle}>
+                  {isKorean ? '트래킹 카메라' : 'Tracking Camera'}
+                </h2>
+              </div>
+              <span className={styles.statePill}>{currentStateLabel}</span>
             </div>
           </section>
         </div>
 
-        <section className={`${styles.panel} ${styles.environmentPanel}`}>
-          <div className={styles.panelHeader}>
-            <div>
-              <span className={styles.panelEyebrow}>Shared World State</span>
-              <h2 className={styles.panelTitle}>Environment Arena</h2>
-              <p className={styles.panelDescription}>
-                Full-scene view of the active run, including terrain, fields, obstacles, and the
-                locomotion context shared across Synchrony.
-              </p>
-            </div>
-            <span className={styles.statePill}>{currentStateLabel}</span>
-          </div>
-
+        <section className={`${styles.panel} ${styles.environmentPanel} ${styles.bleedPanel}`}>
           <div className={styles.environmentFrame}>
             <EnvironmentCanvas renderState={linkedRenderState} />
-            <div className={styles.legendOverlay}>
+          </div>
+
+          <div className={`${styles.panelHeader} ${styles.bleedHeader} ${styles.environmentHeader}`}>
+            <div className={styles.panelHeaderCopy}>
+              <span className={styles.panelEyebrow}>
+                {isKorean ? '공유 환경 상태' : 'Shared World State'}
+              </span>
+              <h2 className={styles.panelTitle}>
+                {isKorean ? '환경 시뮬레이션' : 'Environment Arena'}
+              </h2>
+            </div>
+            <div className={styles.headerLegend}>
               {LEGEND_ITEMS.map((item) => (
                 <span key={item.label} className={styles.legendItem}>
                   <span className={styles.legendDot} style={{ background: item.color }} />

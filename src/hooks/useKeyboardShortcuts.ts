@@ -5,7 +5,13 @@
 // ============================================================================
 
 import { useEffect } from 'react';
-import { useStore } from '../store';
+
+interface KeyboardShortcutOptions {
+  running: boolean;
+  setRunning: (running: boolean) => void;
+  onStep: () => void;
+  onReset: () => void;
+}
 
 /** Returns true when the active element is a text-input context. */
 function isTyping(): boolean {
@@ -17,7 +23,12 @@ function isTyping(): boolean {
   return false;
 }
 
-export function useKeyboardShortcuts(): void {
+export function useKeyboardShortcuts({
+  running,
+  setRunning,
+  onStep,
+  onReset,
+}: KeyboardShortcutOptions): void {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (isTyping()) return;
@@ -26,30 +37,24 @@ export function useKeyboardShortcuts(): void {
 
       if (key === ' ') {
         e.preventDefault();
-        const { running, setRunning } = useStore.getState();
         setRunning(!running);
         return;
       }
 
       if (key === 's') {
         e.preventDefault();
-        const { setRunning, stepSimulation } = useStore.getState();
-        setRunning(false);
-        stepSimulation(1 / 60);
+        onStep();
         return;
       }
 
       if (key === 'r') {
         e.preventDefault();
-        const { resetRun, resetSimulation, showToast } = useStore.getState();
-        resetRun();
-        resetSimulation();
-        showToast('Run reset');
+        onReset();
         return;
       }
     };
 
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, []);
+  }, [onReset, onStep, running, setRunning]);
 }

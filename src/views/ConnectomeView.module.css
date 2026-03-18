@@ -3,10 +3,6 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  margin-top: calc(var(--space-sm) * -1);
-  margin-bottom: calc(var(--space-md) * -1);
-  padding-top: 2px;
-  padding-bottom: 4px;
 }
 
 .toolbarButton {
@@ -234,6 +230,7 @@
   background: rgba(125, 226, 207, 0.12);
   color: var(--color-accent);
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
 }
 
 .stateMeta {
@@ -352,11 +349,15 @@
 .atlasStage {
   flex: 1;
   min-height: 0;
-  padding: 2px 12px 12px;
+  padding: 18px 12px 20px;
 }
 
 .atlasCanvas {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
   height: 100%;
   min-height: 500px;
   border-radius: 0;
@@ -365,14 +366,34 @@
   background: transparent;
 }
 
+.atlasViewport {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
 .controlOverlay {
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 8px;
+  position: relative;
   display: flex;
   justify-content: center;
   z-index: 12;
+  flex: 0 0 auto;
+}
+
+.previewControlOverlay {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  justify-content: center;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.previewControlOverlay > * {
+  pointer-events: auto;
 }
 
 .controlToolbox {
@@ -395,8 +416,45 @@
 
 .atlasSvg {
   width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   height: 100%;
   display: block;
+}
+
+.scenePreviewSection .previewFrame {
+  position: relative;
+  height: 212px;
+  min-height: 212px;
+}
+
+.scenePreviewSection .statePill {
+  min-width: 176px;
+  justify-content: center;
+  padding-inline: 18px;
+}
+
+.topActiveSection,
+.selectedNeuronSection {
+  min-width: 0;
+}
+
+.mobileTopActivePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-md);
+}
+
+.mobileFlowPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-md);
 }
 
 .atlasNode {
@@ -590,24 +648,31 @@
   }
 
   .layout {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    flex: 0 0 auto;
   }
 
   .centerPanel {
     order: 1;
+    min-height: auto;
   }
 
   .leftRail {
     order: 2;
+    min-height: auto;
   }
 
   .rightRail {
     order: 3;
+    min-height: auto;
   }
 
   .leftRail,
   .rightRail {
     overflow: visible;
+    height: auto;
     padding: var(--space-md);
   }
 
@@ -684,6 +749,11 @@
     overflow: hidden;
   }
 
+  .atlasViewport {
+    min-height: 0;
+    aspect-ratio: 98 / 58;
+  }
+
   .controlOverlay {
     position: static;
     left: auto;
@@ -709,8 +779,7 @@
   }
 
   .selectedMetaGrid,
-  .metricGrid,
-  .neuronRow {
+  .metricGrid {
     grid-template-columns: 1fr;
   }
 
@@ -718,10 +787,20 @@
     flex: 0 0 auto;
   }
 
+  .routeStackItem {
+    display: block;
+    width: 100%;
+  }
+
+  .neuronRow {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px 12px;
+    padding: 12px 0;
+  }
+
   .atlasSvg {
     width: 100%;
-    height: auto;
-    aspect-ratio: 98 / 58;
+    height: 100%;
   }
 
   .leftRail {
@@ -730,5 +809,9 @@
 
   .rightRail {
     order: 2;
+  }
+
+  .mobileTopActivePanel {
+    order: 4;
   }
 }

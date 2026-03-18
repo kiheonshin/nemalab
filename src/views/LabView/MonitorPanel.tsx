@@ -5,6 +5,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { WormTracking3D } from '../../components/common/WormTracking3D';
 import { useStore } from '../../store';
 import { generateExplanations, type ExplanationContext } from '../../engine/ExplanationEngine';
 import { formatNumber, timeLabel } from '../../engine/math';
@@ -67,11 +68,7 @@ function TrackingPreview({
     });
   }, [simInstance, snapshot]);
 
-  return (
-    <div className={styles.trackingCanvasFrame}>
-      <canvas ref={canvasRef} className={styles.trackingCanvas} />
-    </div>
-  );
+  return <canvas ref={canvasRef} className={styles.trackingCanvas} />;
 }
 
 export function MonitorPanel() {
@@ -84,6 +81,7 @@ export function MonitorPanel() {
     if (typeof window === 'undefined') return true;
     return !window.matchMedia('(max-width: 768px)').matches;
   });
+  const [trackingViewMode, setTrackingViewMode] = useState<'2d' | '3d'>('2d');
   const hasData = simInstance !== null && snapshot !== null;
 
   // Generate explanations
@@ -145,7 +143,26 @@ export function MonitorPanel() {
         {showTracking ? (
           <div className={`${styles.monitorSection} ${styles.trackingSection}`}>
             <span className={styles.monitorTitle}>{t('lab.tracking')}</span>
-            <div className={styles.trackingCanvasFrame} />
+            <div className={styles.trackingCanvasFrame}>
+              <div className={styles.trackingModeOverlay} role="tablist" aria-label={t('lab.tracking')}>
+                <button
+                  type="button"
+                  className={`${styles.trackingModeButton} ${trackingViewMode === '2d' ? styles.trackingModeButtonActive : ''}`}
+                  onClick={() => setTrackingViewMode('2d')}
+                  aria-pressed={trackingViewMode === '2d'}
+                >
+                  {t('lab.view2d')}
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.trackingModeButton} ${trackingViewMode === '3d' ? styles.trackingModeButtonActive : ''}`}
+                  onClick={() => setTrackingViewMode('3d')}
+                  aria-pressed={trackingViewMode === '3d'}
+                >
+                  {t('lab.view3d')}
+                </button>
+              </div>
+            </div>
           </div>
         ) : null}
         <div className={styles.monitorSection}>
@@ -157,13 +174,52 @@ export function MonitorPanel() {
   }
 
   const metrics = snapshot.metrics;
+  const internalState = simInstance.getState();
 
   return (
     <>
       {showTracking ? (
         <div className={`${styles.monitorSection} ${styles.trackingSection}`}>
           <span className={styles.monitorTitle}>{t('lab.tracking')}</span>
-          <TrackingPreview simInstance={simInstance} snapshot={snapshot} />
+          <div className={styles.trackingCanvasFrame}>
+            <div className={styles.trackingModeOverlay} role="tablist" aria-label={t('lab.tracking')}>
+              <button
+                type="button"
+                className={`${styles.trackingModeButton} ${trackingViewMode === '2d' ? styles.trackingModeButtonActive : ''}`}
+                onClick={() => setTrackingViewMode('2d')}
+                aria-pressed={trackingViewMode === '2d'}
+              >
+                {t('lab.view2d')}
+              </button>
+              <button
+                type="button"
+                className={`${styles.trackingModeButton} ${trackingViewMode === '3d' ? styles.trackingModeButtonActive : ''}`}
+                onClick={() => setTrackingViewMode('3d')}
+                aria-pressed={trackingViewMode === '3d'}
+              >
+                {t('lab.view3d')}
+              </button>
+            </div>
+            {trackingViewMode === '3d' ? (
+              <WormTracking3D
+                className={styles.trackingCanvas}
+                worm={internalState.worm}
+                world={internalState.world}
+                snapshot={snapshot}
+                config={simInstance.getConfig()}
+                eventMarkers={internalState.eventMarkers}
+                defaultPreset="follow"
+                showTemperatureField={
+                  simInstance.getConfig().world.temperatureMode !== 'none' &&
+                  simInstance.getConfig().visuals.showTemperatureOverlay
+                }
+                showOverlayUi={false}
+                fallback={<TrackingPreview simInstance={simInstance} snapshot={snapshot} />}
+              />
+            ) : (
+              <TrackingPreview simInstance={simInstance} snapshot={snapshot} />
+            )}
+          </div>
         </div>
       ) : null}
 
